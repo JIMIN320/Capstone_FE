@@ -20,13 +20,7 @@ class GroupAdapter(private val context: Context, private val groupList: ArrayLis
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         val group = groupList[position]
         holder.bind(group)
-        holder.itemView.setOnClickListener {
-            val intent = Intent(context, MainActivity::class.java).apply {
-                putExtra("groupName", group.Groupname)
-                putExtra("groupTheme", group.Grouptheme)
-            }
-            ContextCompat.startActivity(context, intent, null)
-        }
+
     }
 
     override fun getItemCount(): Int {

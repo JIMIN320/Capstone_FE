@@ -5,4 +5,9 @@
     <dimen name="horizontal_spacing">8dp</dimen>
     <!-- 세로 간격 -->
     <dimen name="vertical_spacing">16dp</dimen>
+    <!--viewpager 추가 -->
+    <dimen name="pageMargin">20dp</dimen>
+    <dimen name="offset">20dp</dimen>
+    <dimen name="pageMarginAndOffset">40dp</dimen>
+    <dimen name="frameSize">600dp</dimen>
 </resources>

@@ -9,7 +9,6 @@ android {
     compileSdk = 34
 
 
-
     defaultConfig {
         applicationId = "com.example.whenandwhere"
         minSdk = 24
@@ -19,6 +18,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+
 
     buildTypes {
         release {
@@ -58,6 +58,10 @@ dependencies {
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("androidx.recyclerview:recyclerview:1.0.0")
     implementation("androidx.recyclerview:recyclerview-selection:1.1.0-rc03")
+
+    //viewpager을 위해 추가(2줄)
+    implementation ("androidx.viewpager2:viewpager2:1.0.0")
+    implementation ("me.relex:circleindicator:2.1.6")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
