@@ -1,7 +1,9 @@
 package com.example.whenandwhere
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.whenandwhere.databinding.ActivityAiResultBinding
@@ -21,6 +23,12 @@ class ai_result : AppCompatActivity() {
 
         binding.course.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.course.adapter = CourseAdapter(courselist)
+
+        val selectBtn : Button = findViewById(R.id.select)
+        selectBtn.setOnClickListener{
+            val intent = Intent(this,moimResult::class.java)
+            startActivity(intent)
+        }
 
     }
 }

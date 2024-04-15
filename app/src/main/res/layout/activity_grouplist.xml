@@ -46,30 +46,9 @@
         />
 
 
-    <ImageButton
-        android:id="@+id/moremoimimage"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:background="@drawable/moremoim"
-        android:layout_marginBottom="40dp"
-        app:layout_constraintBottom_toTopOf="@+id/makemoim"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
 
-    <TextView
-        android:id="@+id/moremoimtext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="더보기"
-        android:textSize="14sp"
-        android:fontFamily="@font/pretendard_medium"
-        android:textColor="#ACACAC"
-        app:layout_constraintTop_toBottomOf="@+id/moremoimimage"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
 
-        />
+
 
 
     <Button
@@ -78,13 +57,13 @@
         android:layout_height="40dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:background="@drawable/graystroke"
+        android:background="@drawable/orangebtn"
         android:paddingHorizontal="15dp"
         android:text="새 모임 만들기"
         android:textSize="16sp"
-        android:textColor="#000000"
-        android:textAlignment="viewStart"
-        android:drawableEnd="@drawable/libraryadd"
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        android:fontFamily="@font/pretendard_bold"
         android:layout_marginBottom="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

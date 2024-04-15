@@ -2,6 +2,7 @@ package com.example.whenandwhere
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.ContactsContract.CommonDataKinds.Nickname
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Button
@@ -10,9 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.whenandwhere.R
 
 class login : AppCompatActivity() {
-    private lateinit var usernameEditText: EditText
-    private lateinit var passwordEditText: EditText
-    private lateinit var loginButton: Button
+//    private lateinit var usernameEditText: EditText
+//    private lateinit var passwordEditText: EditText
+//    private lateinit var loginButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
