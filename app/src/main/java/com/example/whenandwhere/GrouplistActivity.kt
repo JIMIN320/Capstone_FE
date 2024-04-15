@@ -20,9 +20,9 @@ class GrouplistActivity : AppCompatActivity() {
         binding = ActivityGrouplistBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val spanCount = 1// 가로 아이템 수
-        val horizontalSpacing = resources.getDimensionPixelSize(R.dimen.horizontal_spacing)
-        val verticalSpacing = resources.getDimensionPixelSize(R.dimen.vertical_spacing)
+//        val spanCount = 1// 가로 아이템 수
+//        val horizontalSpacing = resources.getDimensionPixelSize(R.dimen.horizontal_spacing)
+//        val verticalSpacing = resources.getDimensionPixelSize(R.dimen.vertical_spacing)
 
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
 
