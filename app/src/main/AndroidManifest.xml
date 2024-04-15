@@ -15,15 +15,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WhenandWhere"
         tools:targetApi="31">
+
         <activity
             android:name=".moimResult"
             android:exported="false" />
+
         <activity
             android:name=".nickname"
             android:exported="false" />
-        <activity
-            android:name=".Schedule"
-            android:exported="true" />
         <activity
             android:name=".Grouphome"
             android:exported="true" />
@@ -68,14 +67,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".TimeResultActivity"
+            android:exported="true"> <!-- 또는 "false"로 설정 -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".memberAdd"
             android:exported="false" />
         <activity
             android:name=".NewGroupMake"
-            android:exported="true" />
-        <activity
-            android:name=".MainActivity"
             android:exported="true" />
         <activity
             android:name=".StartActivity"

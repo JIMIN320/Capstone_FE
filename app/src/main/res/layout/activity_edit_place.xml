@@ -16,11 +16,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#FFFFFF">
+
         <ImageView
             android:id="@+id/arrowleft"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:src="@drawable/arrowleft"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -31,7 +33,8 @@
             android:layout_height="wrap_content"
             android:text="출발지 설정"
             android:textColor="@color/black"
-            android:textSize="24sp"
+            android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -79,6 +82,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayout3"
             android:layout_width="347dp"
             android:layout_height="40dp"
             android:layout_marginTop="8dp"
@@ -101,9 +105,9 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="20dp"
                 android:background="@drawable/button_border"
+                android:gravity="left|center_vertical"
                 android:text="출발지를 입력하세요"
-                android:textColor="#919191"
-                android:gravity="left|center_vertical"/>
+                android:textColor="#919191" />
 
             <ImageButton
                 android:id="@+id/imageView_trans2"
@@ -117,6 +121,20 @@
                 android:src="@drawable/car_orange" />
 
         </LinearLayout>
+
+        <Button
+            android:id="@+id/resultbutton"
+            android:layout_width="346dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="464dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/round_button"
+            android:text="시간 추천 확인하기"
+            android:textColor="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

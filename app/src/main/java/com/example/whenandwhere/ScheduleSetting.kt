@@ -4,15 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.CalendarView
 import android.widget.ImageView
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import java.util.*
 
-class Schedule : AppCompatActivity() {
+class ScheduleSetting : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_schedule)
+        setContentView(R.layout.activity_schedule_setting)
 
         // 각 뷰에 대한 참조를 가져옵니다.
         val backButton = findViewById<ImageView>(R.id.arrowleft)
