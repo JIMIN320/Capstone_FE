@@ -1,8 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".moimResult">
+
+    <LinearLayout
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
+        android:layout_marginStart="42dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+    <TextView
+        android:id="@+id/moim"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00 모임"
+        android:fontFamily="@font/pretendard_medium"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="의 약속 정보"
+        android:fontFamily="@font/pretendard_medium"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/title2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="29dp"
+        android:layout_marginStart="42dp"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/when_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="When : "
+            android:fontFamily="@font/pretendard_regular"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            />
+
+        <TextView
+            android:id="@+id/when"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="20200220"
+            android:fontFamily="@font/pretendard_regular"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/title3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="42dp"
+        app:layout_constraintTop_toBottomOf="@+id/title2"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/where_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Where : "
+            android:fontFamily="@font/pretendard_regular"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            />
+
+        <TextView
+            android:id="@+id/where"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="어딘가"
+            android:fontFamily="@font/pretendard_regular"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/title4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="42dp"
+        app:layout_constraintTop_toBottomOf="@+id/title3"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/course_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="코스"
+            android:fontFamily="@font/pretendard_regular"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            />
+
+
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/place1"
@@ -10,10 +116,11 @@
         android:layout_height="97dp"
         android:background="@drawable/courseview"
         android:gravity="center_horizontal"
+        android:layout_marginTop="30dp"
         android:layout_marginHorizontal="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title4">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -58,10 +165,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="22dp"
                 android:fontFamily="@font/pretendard_regular"
-                android:textColor="@color/main"
                 android:text="해시태그"
-                android:textSize="12sp"
-                />
+                android:textColor="@color/main"
+                android:textSize="12sp" />
 
         </LinearLayout>
 
@@ -74,8 +180,8 @@
         android:background="@drawable/courseview"
         android:gravity="center_horizontal"
         android:layout_marginTop="14dp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/place1">
 
         <LinearLayout
@@ -135,10 +241,9 @@
         android:layout_width="279dp"
         android:layout_height="97dp"
         android:background="@drawable/courseview"
-        android:gravity="center_horizontal"
         android:layout_marginTop="14dp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/place2">
 
         <LinearLayout
