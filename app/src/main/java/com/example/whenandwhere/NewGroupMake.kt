@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -15,6 +16,9 @@ import android.widget.RadioGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class NewGroupMake : AppCompatActivity() {
@@ -36,12 +40,37 @@ class NewGroupMake : AppCompatActivity() {
         setupRadioGroups(radioGroupLine1, radioGroupLine2)
 
         addMemberButton.setOnClickListener {
+            // input 값 가져오기
             val groupName = groupNameEditText.text.toString()
 
-            val intent = Intent(this, GrouplistActivity::class.java)
-            intent.putExtra("groupName", groupName)
-            intent.putExtra("selectedRadioText", selectedRadioText)
-            startActivity(intent)
+            // http 세팅
+            val jwt = HttpUtil().getJWTFromSharedPreference(this@NewGroupMake) ?: ""
+            val client = HttpUtil().createClient(jwt)
+            val retrofit = HttpUtil().createRetrofitWithHeader(client)
+
+            // api 호출
+            val apiService = retrofit.create(ApiService::class.java)
+            val call = apiService.createGroup(GroupDto(id = 0, groupName = groupName, attribute = selectedRadioText))
+
+            call.enqueue(object : Callback<ObjectDto> {
+                override fun onResponse(call: Call<ObjectDto>, response: Response<ObjectDto>) {
+                    Log.d("http" , "${response.code()}")
+
+                    if(response.code() == 201){
+                        val intent = Intent(this@NewGroupMake, GrouplistActivity::class.java)
+                        startActivity(intent)
+                    }
+                    else {
+                        // 요청 실패 처리
+                        Log.d("ERRR", "실패")
+                    }
+                }
+
+                override fun onFailure(call: Call<ObjectDto>, t: Throwable) {
+                    Log.d("ERRR", "에러 이유 : $t")
+                    // 네트워크 오류 처리
+                }
+            })
         }
 //        groupImageView.setOnClickListener {
 //            requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
@@ -58,7 +87,14 @@ class NewGroupMake : AppCompatActivity() {
         currentGroup: RadioGroup,
         otherGroup: RadioGroup
     ) {
-        currentGroup.setOnCheckedChangeListener(null)
+        currentGroup.setOnCheckedChangeListener { group, checkedId ->
+            val checkedRadioButton = findViewById<RadioButton>(checkedId)
+            if (checkedRadioButton != null && checkedRadioButton.isChecked) {
+                selectedRadioText = checkedRadioButton.text.toString()
+                Log.d("selectedRadiotext의 값", selectedRadioText)
+            }
+        }
+
         for (i in 0 until currentGroup.childCount) {
             val radioButton = currentGroup.getChildAt(i) as RadioButton
             radioButton.setOnClickListener {
