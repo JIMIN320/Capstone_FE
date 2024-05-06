@@ -22,7 +22,6 @@ class EditPlace : AppCompatActivity() {
         val editButton4 = findViewById<Button>(R.id.editButton4)
         val button = findViewById<Button>(R.id.button)
         val arrowLeft = findViewById<ImageView>(R.id.arrowleft)
-        val editButton3 = findViewById<Button>(R.id.editButton3)
         val slidingUpPanelLayout = findViewById<SlidingUpPanelLayout>(R.id.main_frame)
 
         val transportationCar = findViewById<ImageButton>(R.id.Transportation_Car)
@@ -74,9 +73,6 @@ class EditPlace : AppCompatActivity() {
             imageViewTrans2.setImageResource(R.drawable.bus_orange)
             transportationCar.setImageResource(R.drawable.car_black)
             transportationBus.setImageResource(R.drawable.bus_orange)
-        }
-        editButton3.setOnClickListener {
-
         }
 
         fun showInputDialog() {
