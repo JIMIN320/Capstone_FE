@@ -17,5 +17,10 @@ class Grouphome : AppCompatActivity() {
             val intent = Intent(this, GrouplistActivity::class.java)
             startActivity(intent)
         }
+
+        editScheduleButton.setOnClickListener {
+            val intent = Intent(this, ScheduleSettingActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

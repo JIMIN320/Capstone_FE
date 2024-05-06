@@ -27,6 +27,10 @@
             android:name=".Grouphome"
             android:exported="true" />
         <activity
+            android:name=".ScheduleSetting"
+            android:exported="true" />
+
+        <activity
             android:name=".EditPlace"
             android:exported="true" />
         <activity
@@ -94,6 +98,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+
     </application>
 
 </manifest>
