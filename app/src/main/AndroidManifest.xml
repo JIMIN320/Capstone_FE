@@ -23,6 +23,7 @@
         <activity
             android:name=".nickname"
             android:exported="false" />
+
         <activity
             android:name=".Grouphome"
             android:exported="true" />

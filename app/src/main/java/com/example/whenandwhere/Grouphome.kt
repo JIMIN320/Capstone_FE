@@ -2,6 +2,7 @@ package com.example.whenandwhere
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 
@@ -18,5 +19,13 @@ class Grouphome : AppCompatActivity() {
             startActivity(intent)
         }
 
+        val editScheduleButton: Button = findViewById(R.id.editschedulebutton)
+
+        editScheduleButton.setOnClickListener {
+            val intent = Intent(this, ScheduleSetting::class.java)
+            startActivity(intent)
+        }
+
     }
+
 }
