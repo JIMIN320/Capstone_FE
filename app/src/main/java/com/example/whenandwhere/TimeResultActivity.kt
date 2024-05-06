@@ -43,13 +43,13 @@ class TimeResultActivity : AppCompatActivity() {
         // Indicator 설정
         updateMonthAndWeek(1000)
 
-        val backbutton = findViewById<ImageView>(R.id.arrowleft2)
+        val backbutton = findViewById<ImageView>(R.id.arrowleft)
         backbutton.setOnClickListener {
             val intent = Intent(this, EditPlace::class.java)
             startActivity(intent)
         }
 
-        val middleplace = findViewById<Button>(R.id.resultbutton4)
+        val middleplace = findViewById<Button>(R.id.resultbutton)
         middleplace.setOnClickListener {
             val intent = Intent(this, middleplace::class.java)
             startActivity(intent)
