@@ -97,6 +97,7 @@ class EditPlace : AppCompatActivity() {
 
         button.setOnClickListener {
             // button을 클릭했을 때 수행할 작업을 여기에 작성
+
         }
     }
 }
