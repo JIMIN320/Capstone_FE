@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
@@ -29,12 +30,20 @@ class EditPlace : AppCompatActivity() {
         val imageViewTrans1 = findViewById<ImageView>(R.id.imageView_trans1)
         val imageViewTrans2 = findViewById<ImageView>(R.id.imageView_trans2)
 
+        val titleTextView = findViewById<TextView>(R.id.title)
+        val nameText1 = findViewById<TextView>(R.id.name_text1)
+        val nameText2 = findViewById<TextView>(R.id.name_text2)
+
         editButton1.setOnClickListener {
-            slidingUpPanelLayout.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
+            val name = nameText1.text.toString()
+            titleTextView.text = "$name 의 출발지"
+            slidingUpPanelLayout.panelState = SlidingUpPanelLayout.PanelState.ANCHORED
         }
 
         editButton2.setOnClickListener {
-            slidingUpPanelLayout.panelState = SlidingUpPanelLayout.PanelState.EXPANDED
+            val name = nameText2.text.toString()
+            titleTextView.text = "$name 의 출발지"
+            slidingUpPanelLayout.panelState = SlidingUpPanelLayout.PanelState.ANCHORED
         }
 
         // arrowLeft 클릭 시 동작 정의
@@ -66,7 +75,6 @@ class EditPlace : AppCompatActivity() {
             transportationCar.setImageResource(R.drawable.car_black)
             transportationBus.setImageResource(R.drawable.bus_orange)
         }
-
         editButton3.setOnClickListener {
 
         }

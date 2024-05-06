@@ -9,7 +9,10 @@
     tools:context=".Grouphome"
     android:gravity="bottom"
     app:umanoDragView="@id/slide_layout"
-    app:umanoOverlay="true">
+    app:umanoOverlay="true"
+    app:umanoPanelHeight="0dp"
+    app:umanoAnchorPoint="0.5"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/back_layout"
@@ -107,7 +110,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/slidingPanel"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="#EEEEEE"
         android:visibility="visible">
 
@@ -186,6 +189,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
+                    android:hint="YYYY-MM-DD"
                     android:inputType="date" />
 
                 <EditText
@@ -194,6 +198,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
+                    android:hint="HH:MM"
                     android:inputType="time" />
             </LinearLayout>
 
