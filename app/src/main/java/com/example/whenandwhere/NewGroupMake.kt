@@ -26,13 +26,14 @@ class NewGroupMake : AppCompatActivity() {
     private lateinit var groupNameEditText: EditText
     private lateinit var radioGroup1: RadioGroup
     private lateinit var radioGroup2: RadioGroup
-    private  var selectedRadioText: String = ""
+    private var selectedRadioText: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_group_make)
 
         groupNameEditText = findViewById(R.id.nameinput)
+        val back: ImageView = findViewById(R.id.arrowleft)
         val addMemberButton: Button = findViewById(R.id.addMember)
         val radioGroupLine1: RadioGroup = findViewById(R.id.rg_line1)
         val radioGroupLine2: RadioGroup = findViewById(R.id.rg_line2)
@@ -72,10 +73,11 @@ class NewGroupMake : AppCompatActivity() {
                 }
             })
         }
-//        groupImageView.setOnClickListener {
-//            requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
-//            openGalleryForImage()
-//    }
+
+        back.setOnClickListener{
+            val intent = Intent(this, GrouplistActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun setupRadioGroups(currentGroup: RadioGroup, otherGroup: RadioGroup) {
@@ -109,6 +111,7 @@ class NewGroupMake : AppCompatActivity() {
         }
     }
 }
+
 //    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
 //        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 //        if (requestCode == 1 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
