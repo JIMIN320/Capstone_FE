@@ -42,15 +42,25 @@
             android:name=".Grouphome"
             android:exported="true" />
         <activity
+            android:name=".ScheduleTitle"
+            android:exported="true" />
+        <activity
             android:name=".ScheduleSetting"
             android:exported="true" />
         <activity
-            android:name=".ScheduleTitle"
-            android:exported="true" />
-
-        <activity
             android:name=".EditPlace"
             android:exported="true" />
+        <activity
+            android:name=".TimeResultActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+
+
         <activity
             android:name=".middleplace"
             android:exported="true" />
@@ -78,9 +88,6 @@
             android:name=".GroupSetting_leader"
             android:exported="false" />
         <activity
-            android:name=".GroupSetting_normal"
-            android:exported="false" />
-        <activity
             android:name=".GrouplistActivity"
             android:exported="true">
             <intent-filter>
@@ -90,14 +97,7 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".TimeResultActivity"
-            android:exported="true"> <!-- 또는 "false"로 설정 -->
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+
 
         <activity
             android:name=".memberAdd"
