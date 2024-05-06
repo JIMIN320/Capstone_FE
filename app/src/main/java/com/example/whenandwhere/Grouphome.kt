@@ -11,21 +11,23 @@ class Grouphome : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_grouphome)
 
-
         val backButton = findViewById<ImageView>(R.id.arrowleft)
+        val setBtn = findViewById<ImageView>(R.id.settings)
+        val editScheduleButton: Button = findViewById(R.id.editschedulebutton)
 
         backButton.setOnClickListener {
             val intent = Intent(this, GrouplistActivity::class.java)
             startActivity(intent)
         }
 
-        val editScheduleButton: Button = findViewById(R.id.editschedulebutton)
+        setBtn.setOnClickListener {
+            val intent = Intent(this, GroupSetting_leader::class.java)
+            startActivity(intent)}
 
         editScheduleButton.setOnClickListener {
             val intent = Intent(this, ScheduleSetting::class.java)
             startActivity(intent)
+
         }
-
     }
-
 }
