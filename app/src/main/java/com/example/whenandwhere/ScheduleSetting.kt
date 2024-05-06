@@ -27,7 +27,7 @@ class ScheduleSetting : AppCompatActivity() {
 
         // 각 뷰에 대한 클릭 리스너를 설정합니다.
         backButton.setOnClickListener {
-            val intent = Intent(this, Grouphome::class.java)
+            val intent = Intent(this, ScheduleTitle::class.java)
             startActivity(intent)
         }
 

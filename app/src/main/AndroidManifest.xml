@@ -44,6 +44,9 @@
         <activity
             android:name=".ScheduleSetting"
             android:exported="true" />
+        <activity
+            android:name=".ScheduleTitle"
+            android:exported="true" />
 
         <activity
             android:name=".EditPlace"

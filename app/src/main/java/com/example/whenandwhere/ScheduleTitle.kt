@@ -3,19 +3,38 @@ package com.example.whenandwhere
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 
-class ScheduleTitle : AppCompatActivity() { // 반드시 액티비티에 맞게 수정하세요.
+class ScheduleTitle : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_schedule_title) // 반드시 레이아웃 파일에 맞게 수정하세요.
+        setContentView(R.layout.activity_schedule_title)
 
-        val resultButton = findViewById<Button>(R.id.resultbutton3) // resultbutton3 버튼을 찾습니다.
+        val backbutton = findViewById<ImageView>(R.id.arrowleft2)
+        backbutton.setOnClickListener {
+            val intent = Intent(this, Grouphome::class.java)
+            startActivity(intent)
+        }
+
+        val member1 = findViewById<Button>(R.id.button2)
+        member1.setOnClickListener {
+            val intent = Intent(this, ScheduleSetting::class.java)
+            startActivity(intent)
+        }
+
+        val member2 = findViewById<Button>(R.id.button3)
+        member1.setOnClickListener {
+            val intent = Intent(this, ScheduleSetting::class.java)
+            startActivity(intent)
+        }
+
+        val resultButton = findViewById<Button>(R.id.resultbutton3)
         resultButton.setOnClickListener {
-            // Intent를 사용하여 새로운 Activity를 시작합니다.
             val intent = Intent(this, EditPlace::class.java)
             startActivity(intent)
         }
+
     }
 }
