@@ -41,7 +41,7 @@
             android:text="예"
             android:textAlignment="center"
             android:button="@android:color/transparent"            android:background="@drawable/radio_sector"
-            android:checked="true"
+            android:checked="false"
             android:textColor="@drawable/radio_text_color"
             android:fontFamily="@font/pretendard_medium"
             android:textSize="14sp"/>

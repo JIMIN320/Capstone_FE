@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -22,13 +23,14 @@ class NewGroupMake : AppCompatActivity() {
     private lateinit var groupNameEditText: EditText
     private lateinit var radioGroup1: RadioGroup
     private lateinit var radioGroup2: RadioGroup
-    private  var selectedRadioText: String = ""
+    private var selectedRadioText: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_group_make)
 
         groupNameEditText = findViewById(R.id.nameinput)
+        val back: ImageView = findViewById(R.id.arrowleft)
         val addMemberButton: Button = findViewById(R.id.addMember)
         val radioGroupLine1: RadioGroup = findViewById(R.id.rg_line1)
         val radioGroupLine2: RadioGroup = findViewById(R.id.rg_line2)
@@ -43,10 +45,11 @@ class NewGroupMake : AppCompatActivity() {
             intent.putExtra("selectedRadioText", selectedRadioText)
             startActivity(intent)
         }
-//        groupImageView.setOnClickListener {
-//            requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
-//            openGalleryForImage()
-//    }
+
+        back.setOnClickListener{
+            val intent = Intent(this, GrouplistActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun setupRadioGroups(currentGroup: RadioGroup, otherGroup: RadioGroup) {
@@ -58,7 +61,14 @@ class NewGroupMake : AppCompatActivity() {
         currentGroup: RadioGroup,
         otherGroup: RadioGroup
     ) {
-        currentGroup.setOnCheckedChangeListener(null)
+        currentGroup.setOnCheckedChangeListener { group, checkedId ->
+            val checkedRadioButton = findViewById<RadioButton>(checkedId)
+            if (checkedRadioButton != null && checkedRadioButton.isChecked) {
+                selectedRadioText = checkedRadioButton.text.toString()
+                Log.d("selectedRadiotext의 값", selectedRadioText)
+            }
+        }
+
         for (i in 0 until currentGroup.childCount) {
             val radioButton = currentGroup.getChildAt(i) as RadioButton
             radioButton.setOnClickListener {
@@ -73,6 +83,7 @@ class NewGroupMake : AppCompatActivity() {
         }
     }
 }
+
 //    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
 //        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 //        if (requestCode == 1 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

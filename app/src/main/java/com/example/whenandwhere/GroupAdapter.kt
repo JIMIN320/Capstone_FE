@@ -2,6 +2,7 @@ package com.example.whenandwhere
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +22,17 @@ class GroupAdapter(private val context: Context, private val groupList: ArrayLis
         val group = groupList[position]
         holder.bind(group)
 
+        // 아이템 클릭 리스너 설정
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, Grouphome::class.java).apply {
+                putExtra("groupName", group.Groupname)
+                putExtra("groupTheme", group.Grouptheme)
+            }
+            Log.d("GroupAdapter", "Selected groupName: ${group.Groupname}, groupTheme: ${group.Grouptheme}")
+            context.startActivity(intent)
+        }
     }
+
 
     override fun getItemCount(): Int {
         return groupList.size
@@ -36,6 +47,7 @@ class GroupAdapter(private val context: Context, private val groupList: ArrayLis
             groupThemeTextView.text = group.Grouptheme
         }
     }
+
 
     fun addGroup(group: Groups) {
         groupList.add(group)

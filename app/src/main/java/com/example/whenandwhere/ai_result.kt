@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.whenandwhere.databinding.ActivityAiResultBinding
@@ -15,6 +16,13 @@ class ai_result : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAiResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val back: ImageView = findViewById(R.id.arrowleft)
+
+        back.setOnClickListener{
+            val intent = Intent(this, middleplace::class.java)
+            startActivity(intent)
+        }
 
         val courselist = arrayListOf(
             Courses("1","1","1","1","1","1","1","1","1"),
