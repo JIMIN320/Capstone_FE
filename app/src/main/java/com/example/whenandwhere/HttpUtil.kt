@@ -7,7 +7,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-val URL = "http://43.201.72.114:8080"
+val URL = "http://172.30.1.20:8080"
 
 class HttpUtil {
     // JWT를 SharedPreference에서 가져오는 함수
@@ -17,14 +17,57 @@ class HttpUtil {
         )
         return sharedPref.getString("jwt", null)
     }
+    // 유저의 email을 가져오는 함수
+    // JWT를 SharedPreference에서 가져오는 함수
+    fun getEmailFromSharedPreference(context : Context): String? {
+        val sharedPref = context.getSharedPreferences("com.example.whenandwhere.JWT",
+            AppCompatActivity.MODE_PRIVATE
+        )
+        return sharedPref.getString("email", null)
+    }
+
+    fun getCurrentGroupNameFromSharedPreference(context : Context): String? {
+        val sharedPref = context.getSharedPreferences("com.example.whenandwhere.GROUP",
+            AppCompatActivity.MODE_PRIVATE
+        )
+        return sharedPref.getString("groupName", null)
+    }
+
+    fun getCurrentGroupThemeFromSharedPreference(context : Context): String? {
+        val sharedPref = context.getSharedPreferences("com.example.whenandwhere.GROUP",
+            AppCompatActivity.MODE_PRIVATE
+        )
+        return sharedPref.getString("groupTheme", null)
+    }
+
+    fun getCurrentGroupIdFromSharedPreference(context : Context): Int {
+        val sharedPref = context.getSharedPreferences("com.example.whenandwhere.GROUP",
+            AppCompatActivity.MODE_PRIVATE
+        )
+        return sharedPref.getInt("groupId", 0)
+    }
 
     // JWT를 SharedPreference에 저장하는 함수
-    fun saveJWTToSharedPreference(context : Context, jwt: String) {
+    fun saveJWTToSharedPreference(context : Context, jwt: String, email: String) {
         val sharedPref = context.getSharedPreferences("com.example.whenandwhere.JWT",
             AppCompatActivity.MODE_PRIVATE
         )
         with(sharedPref.edit()) {
             putString("jwt", jwt)
+            putString("email", email)
+            apply()
+        }
+    }
+
+    // JWT를 SharedPreference에 저장하는 함수
+    fun saveCurrentGroupToSharedPreference(context : Context, groupName: String, groupTheme: String, groupId : Int) {
+        val sharedPref = context.getSharedPreferences("com.example.whenandwhere.GROUP",
+            AppCompatActivity.MODE_PRIVATE
+        )
+        with(sharedPref.edit()) {
+            putString("groupTheme", groupTheme)
+            putString("groupName", groupName)
+            putInt("groupId", groupId)
             apply()
         }
     }
