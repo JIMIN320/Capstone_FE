@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +15,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 
 class GrouplistActivity : AppCompatActivity() {
+    private lateinit var nickname: TextView
     private lateinit var binding: ActivityGrouplistBinding
     private val ADD_GROUP_REQUEST = 1
 
@@ -21,6 +23,10 @@ class GrouplistActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityGrouplistBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        nickname = findViewById(R.id.nickname)
+        nickname.text = HttpUtil().getEmailFromSharedPreference(this)
+
         // Retrofit 객체 생성
         val jwt = HttpUtil().getJWTFromSharedPreference(this) ?: ""
         val client = HttpUtil().createClient(jwt)
@@ -63,7 +69,7 @@ class GrouplistActivity : AppCompatActivity() {
                     Log.d("ApiTest", "유저는: ${it.data}")
                     val resultList = arrayListOf<Groups>()
                     for(group in it.data){
-                        resultList.add(Groups(group.groupName, group.attribute))
+                        resultList.add(Groups(group.id, group.groupName, group.attribute))
                     }
 
                     return@withContext resultList
