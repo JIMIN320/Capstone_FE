@@ -79,7 +79,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:background="@drawable/round_button"
-        android:text="중간장소 확인하기"
+        android:text="중간장소 입력하기"
         android:textColor="#FFFFFF" />
 
 </LinearLayout>
