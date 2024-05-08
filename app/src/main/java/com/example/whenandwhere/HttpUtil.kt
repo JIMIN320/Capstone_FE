@@ -7,7 +7,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-val URL = "http://172.30.1.20:8080"
+val URL = "http://192.168.123.128:8080"
 
 class HttpUtil {
     // JWT를 SharedPreference에서 가져오는 함수

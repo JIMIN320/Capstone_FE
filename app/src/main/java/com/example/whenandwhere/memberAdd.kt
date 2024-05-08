@@ -21,7 +21,7 @@ class memberAdd : AppCompatActivity() {
 
         // 뒤로가기 버튼
         back.setOnClickListener {
-            val intent = Intent(this, NewGroupMake::class.java)
+            val intent = Intent(this, GrouplistActivity::class.java)
             startActivity(intent)
         }
         // 링크 복사 또는 공유 버튼
