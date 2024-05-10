@@ -19,8 +19,10 @@ class EditPlace : AppCompatActivity() {
         val editButton1 = findViewById<Button>(R.id.editButton1)
         val editButton2 = findViewById<Button>(R.id.editButton2)
 
+        val resultButton = findViewById<Button>(R.id.resultbutton)
+
         val editButton4 = findViewById<Button>(R.id.editButton4)
-        val button = findViewById<Button>(R.id.button)
+        val savebutton = findViewById<Button>(R.id.savebutton)
         val arrowLeft = findViewById<ImageView>(R.id.arrowleft)
         val slidingUpPanelLayout = findViewById<SlidingUpPanelLayout>(R.id.main_frame)
 
@@ -75,7 +77,6 @@ class EditPlace : AppCompatActivity() {
             transportationBus.setImageResource(R.drawable.bus_orange)
         }
 
-
         fun showInputDialog() {
             val builder = AlertDialog.Builder(this)
             builder.setTitle("출발하는 곳 입력")
@@ -100,9 +101,12 @@ class EditPlace : AppCompatActivity() {
             // editButton4을 클릭했을 때 수행할 작업을 여기에 작성
         }
 
-        button.setOnClickListener {
+        savebutton.setOnClickListener {
             // button을 클릭했을 때 수행할 작업을 여기에 작성
-
+        }
+        resultButton.setOnClickListener {
+            val intent = Intent(this, TimeResultActivity::class.java)
+            startActivity(intent)
         }
     }
 }

@@ -1,6 +1,9 @@
 package com.example.whenandwhere
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.whenandwhere.databinding.ActivityTimeResultBinding
@@ -39,6 +42,18 @@ class TimeResultActivity : AppCompatActivity() {
 
         // Indicator 설정
         updateMonthAndWeek(1000)
+
+        val backbutton = findViewById<ImageView>(R.id.arrowleft)
+        backbutton.setOnClickListener {
+            val intent = Intent(this, EditPlace::class.java)
+            startActivity(intent)
+        }
+
+        val nextbtn = findViewById<Button>(R.id.resultbutton)
+        nextbtn.setOnClickListener {
+            val intent = Intent(this, middleplace::class.java)
+            startActivity(intent)
+        }
     }
 
     // 현재 월과 주차 업데이트하는 함수
