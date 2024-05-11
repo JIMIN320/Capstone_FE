@@ -49,8 +49,8 @@ class TimeResultActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val middleplace = findViewById<Button>(R.id.resultbutton)
-        middleplace.setOnClickListener {
+        val nextbtn = findViewById<Button>(R.id.resultbutton)
+        nextbtn.setOnClickListener {
             val intent = Intent(this, middleplace::class.java)
             startActivity(intent)
         }
