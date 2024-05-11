@@ -36,9 +36,17 @@ class GroupAdapter(private val context: Context, private val groupList: ArrayLis
 
         // 아이템 클릭 리스너 설정
         holder.itemView.setOnClickListener {
+            group.Groupname?.let { groupName ->
+                group.Grouptheme?.let { groupTheme ->
+                    group.groupId?.let{groupId ->
+                        HttpUtil().saveCurrentGroupToSharedPreference(context, groupName, groupTheme, groupId)
+                    }
+                }
+            }
             val intent = Intent(context, Grouphome::class.java).apply {
                 putExtra("groupName", group.Groupname)
                 putExtra("groupTheme", group.Grouptheme)
+                putExtra("groupId", group.groupId)
             }
             Log.d("GroupAdapter", "Selected groupName: ${group.Groupname}, groupTheme: ${group.Grouptheme}")
             context.startActivity(intent)

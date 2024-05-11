@@ -18,7 +18,7 @@
         android:textSize="14sp"
         android:textColor="@color/black"
         android:fontFamily="@font/pretendard_medium"
-        tools:text="정말 모임을 나가시겠습니까?" />
+        tools:text="정말 내보내시겠습니까?" />
 
     <LinearLayout
         android:layout_width="match_parent"

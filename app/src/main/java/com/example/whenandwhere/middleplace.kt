@@ -45,6 +45,7 @@ class middleplace : AppCompatActivity() {
                 moveToNextActivity(false) // 다음 액티비티로 이동하면서 false 값을 전달
             }
         }
+
     }
 
     // 다음 액티비티로 이동하면서 값을 전달하는 함수

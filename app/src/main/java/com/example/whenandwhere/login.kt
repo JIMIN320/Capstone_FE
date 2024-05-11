@@ -53,7 +53,7 @@ class login : AppCompatActivity() {
                             // 다음 페이지로 email 값을 들고 넘어가기
                             val intent = Intent(this@login, GrouplistActivity::class.java)
                             // JWT 토큰을 쿠키에 저장
-                            HttpUtil().saveJWTToSharedPreference(this@login, it.data.token)
+                            HttpUtil().saveJWTToSharedPreference(this@login, it.data.token, it.data.email)
                             startActivity(intent)
                         }
                     }

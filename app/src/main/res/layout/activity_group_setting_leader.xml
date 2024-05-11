@@ -29,91 +29,15 @@
         app:layout_constraintTop_toTopOf="@+id/arrowleft"
         app:layout_constraintStart_toEndOf="@+id/arrowleft"/>
 
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="멤버 관리"
-        android:layout_marginTop="45dp"
-        android:layout_marginLeft="17dp"
-        android:fontFamily="@font/pretendard_semibold"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title"
-         />
-
-"
-
-
-    <RelativeLayout
-        android:id="@+id/addMember"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:layout_marginTop="71dp"
-        android:background="@drawable/edge"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title">
-
-        <Button
-            android:id="@+id/addMemberText"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="?attr/selectableItemBackground"
-            android:gravity="center_vertical"
-            android:paddingLeft="30dp"
-            android:fontFamily="@font/pretendard_medium"
-            android:text="멤버 초대하기"
-            android:textColor="#000000"
-            android:textSize="17sp"/>
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/exitMember"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:background="@drawable/edge"
-        android:layout_marginTop="-2dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addMember">
-
-        <Button
-            android:id="@+id/exitMemberText"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="?attr/selectableItemBackground"
-            android:fontFamily="@font/pretendard_medium"
-            android:gravity="center_vertical"
-            android:paddingLeft="30dp"
-            android:text="멤버 내보내기"
-            android:textColor="#000000"
-            android:textSize="17sp" />
-
-    </RelativeLayout>
-
-    <TextView
-        android:id="@+id/settingGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="모임 관리"
-        android:layout_marginTop="45dp"
-        android:layout_marginLeft="17dp"
-        android:fontFamily="@font/pretendard_semibold"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/exitMember" />
-
     <RelativeLayout
         android:id="@+id/exitGroup"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:background="@drawable/edge"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settingGroup">
+        app:layout_constraintTop_toBottomOf="@+id/title">
 
         <Button
             android:id="@+id/exitGroupBtn"
@@ -127,6 +51,96 @@
             android:textSize="17sp"/>
     </RelativeLayout>
 
+"
+
+
+    <RelativeLayout
+        android:id="@+id/addMember"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/edge"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settingGroup">
+
+        <Button
+            android:id="@+id/addMemberBtn"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:paddingLeft="30dp"
+            android:fontFamily="@font/pretendard_medium"
+            android:text="멤버 초대하기"
+            android:textColor="#000000"
+            android:textSize="17sp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/resign"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:background="@drawable/edge"
+        android:layout_marginTop="-2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addMember">
+
+        <Button
+            android:id="@+id/resingBtn"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="?attr/selectableItemBackground"
+            android:fontFamily="@font/pretendard_medium"
+            android:gravity="center_vertical"
+            android:paddingLeft="30dp"
+            android:text="멤버 내보내기"
+            android:textColor="#000000"
+            android:textSize="17sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/accept"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:background="@drawable/edge"
+        android:layout_marginTop="-2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/resign">
+
+        <Button
+            android:id="@+id/acceptBtn"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="?attr/selectableItemBackground"
+            android:fontFamily="@font/pretendard_medium"
+            android:gravity="center_vertical"
+            android:paddingLeft="30dp"
+            android:text="가입 신청 수락하기"
+            android:textColor="#000000"
+            android:textSize="17sp" />
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/settingGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="모임 관리"
+        android:layout_marginTop="70dp"
+        android:layout_marginLeft="17dp"
+        android:fontFamily="@font/pretendard_semibold"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/exitGroup" />
+
+
+
     <RelativeLayout
         android:id="@+id/removeGroup"
         android:layout_width="wrap_content"
@@ -135,18 +149,19 @@
         android:layout_marginTop="-2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/exitGroup">
+        app:layout_constraintTop_toBottomOf="@+id/accept">
 
         <Button
-            android:id="@+id/removeGroupText"
+            android:id="@+id/removeGroupBtn"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:background="?attr/selectableItemBackground"            android:gravity="center_vertical"
-            android:paddingLeft="30dp"
+            android:background="?attr/selectableItemBackground"
             android:fontFamily="@font/pretendard_medium"
-            android:text="모임 없애기"
+            android:gravity="center_vertical"
+            android:paddingLeft="30dp"
+            android:text="모임 삭제하기"
             android:textColor="#000000"
-            android:textSize="17sp"/>
+            android:textSize="17sp" />
 
     </RelativeLayout>
 
