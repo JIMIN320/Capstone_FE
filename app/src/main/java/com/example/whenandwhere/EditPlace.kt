@@ -102,7 +102,7 @@ class EditPlace : AppCompatActivity() {
         }
 
         savebutton.setOnClickListener {
-            // button을 클릭했을 때 수행할 작업을 여기에 작성
+            slidingUpPanelLayout.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
         }
         resultButton.setOnClickListener {
             val intent = Intent(this, TimeResultActivity::class.java)
