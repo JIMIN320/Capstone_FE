@@ -7,7 +7,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-val URL = "http://192.168.123.128:8080"
+val URL = "http://172.30.1.20:8080"
 
 class HttpUtil {
     // JWT를 SharedPreference에서 가져오는 함수
@@ -16,35 +16,6 @@ class HttpUtil {
             AppCompatActivity.MODE_PRIVATE
         )
         return sharedPref.getString("jwt", null)
-    }
-    // 유저의 email을 가져오는 함수
-    // JWT를 SharedPreference에서 가져오는 함수
-    fun getEmailFromSharedPreference(context : Context): String? {
-        val sharedPref = context.getSharedPreferences("com.example.whenandwhere.JWT",
-            AppCompatActivity.MODE_PRIVATE
-        )
-        return sharedPref.getString("email", null)
-    }
-
-    fun getCurrentGroupNameFromSharedPreference(context : Context): String? {
-        val sharedPref = context.getSharedPreferences("com.example.whenandwhere.GROUP",
-            AppCompatActivity.MODE_PRIVATE
-        )
-        return sharedPref.getString("groupName", null)
-    }
-
-    fun getCurrentGroupThemeFromSharedPreference(context : Context): String? {
-        val sharedPref = context.getSharedPreferences("com.example.whenandwhere.GROUP",
-            AppCompatActivity.MODE_PRIVATE
-        )
-        return sharedPref.getString("groupTheme", null)
-    }
-
-    fun getCurrentGroupIdFromSharedPreference(context : Context): Int {
-        val sharedPref = context.getSharedPreferences("com.example.whenandwhere.GROUP",
-            AppCompatActivity.MODE_PRIVATE
-        )
-        return sharedPref.getInt("groupId", 0)
     }
 
     // JWT를 SharedPreference에 저장하는 함수
@@ -57,6 +28,38 @@ class HttpUtil {
             putString("email", email)
             apply()
         }
+    }
+
+    // 현재 그룹 id(PK)를 가져오는 함수
+    fun getCurrentGroupIdFromSharedPreference(context : Context): Int {
+        val sharedPref = context.getSharedPreferences("com.example.whenandwhere.GROUP",
+            AppCompatActivity.MODE_PRIVATE
+        )
+        return sharedPref.getInt("groupId", 0)
+    }
+
+    // 유저의 email을 가져오는 함수
+    fun getEmailFromSharedPreference(context : Context): String? {
+        val sharedPref = context.getSharedPreferences("com.example.whenandwhere.JWT",
+            AppCompatActivity.MODE_PRIVATE
+        )
+        return sharedPref.getString("email", null)
+    }
+
+    // 현재 그룹 이름을 가져오는 함수
+    fun getCurrentGroupNameFromSharedPreference(context : Context): String? {
+        val sharedPref = context.getSharedPreferences("com.example.whenandwhere.GROUP",
+            AppCompatActivity.MODE_PRIVATE
+        )
+        return sharedPref.getString("groupName", null)
+    }
+
+    // 현재 그룹 테마를 가져오는 함수
+    fun getCurrentGroupThemeFromSharedPreference(context : Context): String? {
+        val sharedPref = context.getSharedPreferences("com.example.whenandwhere.GROUP",
+            AppCompatActivity.MODE_PRIVATE
+        )
+        return sharedPref.getString("groupTheme", null)
     }
 
     // JWT를 SharedPreference에 저장하는 함수

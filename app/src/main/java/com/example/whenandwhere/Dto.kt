@@ -14,7 +14,7 @@ data class LoginDto (
 
 data class ObjectDto (
     @Expose
-    @SerializedName("data") var data : DataDto,
+    @SerializedName("data") var data : DataDto?,
     @SerializedName("message") var message : String
 )
 
@@ -27,6 +27,12 @@ data class GroupListDto(
 data class MemberListDto(
     @Expose
     @SerializedName("data") var data : ArrayList<UserDto>,
+    @SerializedName("message") var message : String
+)
+
+data class ApplyListDto(
+    @Expose
+    @SerializedName("data") var data : ArrayList<ApplyDto>,
     @SerializedName("message") var message : String
 )
 
@@ -62,3 +68,12 @@ data class ScheduleDto(
     val startTime : String,
     val endTime : String
 ): DataDto
+
+data class ApplyDto(
+    val id : Int,
+    val applyGroupId : Int?,
+    val applierId : String?,
+    val applierNickname : String?,
+    val state : Boolean?,
+    val decide : Boolean?
+) : DataDto
