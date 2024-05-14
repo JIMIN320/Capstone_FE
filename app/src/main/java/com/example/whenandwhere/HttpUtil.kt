@@ -10,6 +10,11 @@ import java.util.concurrent.TimeUnit
 val URL = "http://172.30.1.20:8080"
 
 class HttpUtil {
+    // URL을 넘겨주는 함수
+    fun getServerURL():String{
+        return URL
+    }
+
     // JWT를 SharedPreference에서 가져오는 함수
     fun getJWTFromSharedPreference(context : Context): String? {
         val sharedPref = context.getSharedPreferences("com.example.whenandwhere.JWT",
