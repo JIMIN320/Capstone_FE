@@ -9,7 +9,7 @@ import retrofit2.http.Path
 interface ApiService {
     // 테스트 API
     @GET("api/test")
-    fun testData(): Call<String>
+    fun testData(): Call<ObjectDto>
 
     // auth, 유저 API
     @POST("api/oauth/sign-check")
