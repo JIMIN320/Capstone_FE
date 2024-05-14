@@ -32,18 +32,18 @@ class memberAdd : AppCompatActivity() {
         shareLink.setOnClickListener {
             Log.d("URL", "url")
             // URL 복사
-            /* val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-           val groupId = HttpUtil().getCurrentGroupIdFromSharedPreference(this)
+            val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val groupId = HttpUtil().getCurrentGroupIdFromSharedPreference(this)
             val groupName = HttpUtil().getCurrentGroupNameFromSharedPreference(this)
-            val url = "${HttpUtil().getServerURL()}/${groupName}#${groupId}"
+            val url = "${HttpUtil().getServerURL()}/api/apply/${groupName}#${groupId}"
             Log.d("URL", url)
-           val clip = ClipData.newPlainText("URL", url)
+            val clip = ClipData.newPlainText("URL", url)
             clipboard.setPrimaryClip(clip)
 
-            val invoice = clipboard.primaryClip.toString()
+            val invoice = clipboard.getPrimaryClip()
             AlertDialog.Builder(this)
-                .setTitle("복사된 URL $invoice")
-            Log.d("CLIPBOARD", invoice)*/
+                .setTitle("복사된 URL ${invoice.toString()}")
+            Log.d("CLIPBOARD", invoice.toString())
         }
     }
 }
