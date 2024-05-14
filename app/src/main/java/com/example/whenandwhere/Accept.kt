@@ -32,9 +32,9 @@ class Accept : AppCompatActivity(), acceptAdapter.ButtonClickListener {
         recyclerView.adapter = adapter
 
         // 데이터 추가 예시
-        itemList.add(acceptClass("Item 1"))
-        itemList.add(acceptClass("Item 2"))
-        itemList.add(acceptClass("Item 3"))
+        itemList.add(acceptClass(1,"Item 1"))
+        itemList.add(acceptClass(2,"Item 2"))
+        itemList.add(acceptClass(3,"Item 3"))
         adapter.notifyDataSetChanged()
     }
 

@@ -14,7 +14,6 @@ class memberAdd : AppCompatActivity() {
         setContentView(R.layout.activity_member_add)
 
         val rectangle3Button = findViewById<Button>(R.id.sharelink)
-        rectangle3Button.isEnabled = false
 
         val back : ImageView = findViewById(R.id.arrowleft)
         val shareLink : Button = findViewById(R.id.sharelink)
