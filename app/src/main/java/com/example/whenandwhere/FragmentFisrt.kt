@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.GridLayoutManager
 
 class FragmentFirst : Fragment() {
 
@@ -18,10 +19,13 @@ class FragmentFirst : Fragment() {
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
 
-        // RecyclerView에 추가할 ItemDecoration 객체를 생성합니다.
         val itemDecoration = TimeTableItemDecoration(requireContext())
         recyclerView.addItemDecoration(itemDecoration)
 
-        // 여기서 RecyclerView에 어댑터를 설정하거나 기타 초기화를 수행할 수 있습니다.
+        val gridLayoutManager = GridLayoutManager(requireContext(), 7)
+        recyclerView.layoutManager = gridLayoutManager
+
+        val adapter = ScheduleAdapter(requireContext(), 12, 7) // 12시간, 7요일
+        recyclerView.adapter = adapter
     }
 }
