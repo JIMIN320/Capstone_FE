@@ -42,6 +42,8 @@ android {
 }
 
 dependencies {
+    implementation ("com.google.android.material:material:1.1.0")
+
     implementation ("com.google.android.material:material:1.4.0-alpha01") //buttomsheet
     implementation ("androidx.activity:activity-ktx:1.3.0")
     implementation ("com.sothree.slidinguppanel:library:3.4.0")

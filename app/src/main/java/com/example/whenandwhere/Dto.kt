@@ -3,6 +3,7 @@ package com.example.whenandwhere
 import android.provider.ContactsContract.Data
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import java.time.LocalDateTime
 import java.util.Objects
 
 data class LoginDto (
@@ -17,9 +18,21 @@ data class ObjectDto (
     @SerializedName("message") var message : String
 )
 
-data class ObjectListDto(
+data class GroupListDto(
     @Expose
     @SerializedName("data") var data : ArrayList<GroupDto>,
+    @SerializedName("message") var message : String
+)
+
+data class MemberListDto(
+    @Expose
+    @SerializedName("data") var data : ArrayList<UserDto>,
+    @SerializedName("message") var message : String
+)
+
+data class ScheduleListDto(
+    @Expose
+    @SerializedName("data") var data : ArrayList<ScheduleDto>,
     @SerializedName("message") var message : String
 )
 
@@ -41,3 +54,11 @@ data class GroupDto(
     val groupName : String,
     val attribute : String
 ) : DataDto
+
+data class ScheduleDto(
+    val id : Int,
+    val title : String,
+    val detail : String,
+    val startTime : String,
+    val endTime : String
+): DataDto

@@ -8,5 +8,6 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+
     <style name="Theme.WhenandWhere" parent="Base.Theme.WhenandWhere" />
 </resources>

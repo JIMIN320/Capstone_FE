@@ -79,30 +79,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/calendarView" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/first_schedule"
-            android:layout_width="342dp"
-            android:layout_height="wrap_content"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/schedule_recycler_view"
+            android:layout_width="411dp"
+            android:layout_height="255dp"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
-            android:background="@drawable/button_border"
-            android:text="11월 1주차 일정\n09:00~18:00"
-            android:textColor="@android:color/black"
+            android:layout_marginEnd="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.507"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/add_schedule" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/second_schedule"
-            android:layout_width="342dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/button_border"
-            android:text="11월 2주차 일정\n11:00~15:00"
-            android:textColor="@android:color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/first_schedule" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -184,7 +171,7 @@
                     android:textSize="20sp" />
 
                 <EditText
-                    android:id="@+id/editTextDate1"
+                    android:id="@+id/startyearinput"
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -193,7 +180,7 @@
                     android:inputType="date" />
 
                 <EditText
-                    android:id="@+id/editTextTime2"
+                    android:id="@+id/starthourinput"
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -218,7 +205,7 @@
                     android:textSize="20sp" />
 
                 <EditText
-                    android:id="@+id/editTextDate3"
+                    android:id="@+id/endyearinput"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -227,7 +214,7 @@
                     android:inputType="text" />
 
                 <EditText
-                    android:id="@+id/editTextTime4"
+                    android:id="@+id/endhourinput"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -235,14 +222,9 @@
                     android:hint="HH:MM"
                     android:inputType="text" />
 
-
             </LinearLayout>
 
         </LinearLayout>
 
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>

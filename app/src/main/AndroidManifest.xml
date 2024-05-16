@@ -16,28 +16,34 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.WhenandWhere"
-        tools:targetApi="31"
-        android:usesCleartextTraffic="true">
-
-        <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="31">
+        <activity
+            android:name=".Accept"
+            android:exported="false" />
+        <activity
+            android:name=".Resign"
+            android:exported="true" />
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:host="oauth"
+
+                <data
+                    android:host="oauth"
                     android:scheme="kakao3d164f1ef97c8f24a2f77a9b178ca82f" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".moimResult"
             android:exported="false" />
-
         <activity
             android:name=".nickname"
             android:exported="false" />
-
         <activity
             android:name=".Grouphome"
             android:exported="true" />
@@ -55,12 +61,10 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
-
         <activity
             android:name=".middleplace"
             android:exported="true" />
@@ -86,7 +90,7 @@
         </activity>
         <activity
             android:name=".GroupSetting_leader"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".GrouplistActivity"
             android:exported="true">
@@ -96,9 +100,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
-
         <activity
             android:name=".memberAdd"
             android:exported="false" />
@@ -116,9 +117,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
-
     </application>
 
 </manifest>

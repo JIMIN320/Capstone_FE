@@ -48,7 +48,7 @@ class nickname : AppCompatActivity() {
                             if(it.data is LoginDto){
                                 val loginDto: LoginDto = it.data as LoginDto
                                 Log.d("Token", "토큰: ${loginDto.accessToken}")
-                                HttpUtil().saveJWTToSharedPreference(this@nickname, loginDto.accessToken)
+                                HttpUtil().saveJWTToSharedPreference(this@nickname, loginDto.accessToken, loginDto.data.email)
                                 val intent = Intent(this@nickname, GrouplistActivity::class.java)
                                 startActivity(intent)
                             }
