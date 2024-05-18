@@ -51,4 +51,3 @@ class EditPlace : AppCompatActivity() {
         recyclerView.adapter = adapter
     }
 }
-

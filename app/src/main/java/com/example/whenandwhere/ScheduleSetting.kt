@@ -9,6 +9,8 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.lifecycle.lifecycleScope
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
@@ -21,6 +23,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import java.util.*
+
 
 class ScheduleSetting : AppCompatActivity() {
     private lateinit var scheduleTitleText : TextView
@@ -53,8 +56,6 @@ class ScheduleSetting : AppCompatActivity() {
         // 각 뷰에 대한 참조를 가져옵니다.
         val backButton = findViewById<ImageView>(R.id.arrowleft)
         val selectWeekButton = findViewById<AppCompatButton>(R.id.select_week)
-        val firstScheduleButton = findViewById<AppCompatButton>(R.id.first_schedule)
-        val secondScheduleButton = findViewById<AppCompatButton>(R.id.second_schedule)
         val addScheduleButton = findViewById<AppCompatButton>(R.id.add_schedule)
 
         // 일정 추가에 대한 뷰들의 참조를 가져옵니다
@@ -72,9 +73,37 @@ class ScheduleSetting : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val calendar = Calendar.getInstance()
         val calendarView = findViewById<CalendarView>(R.id.calendarView)
-        calendarView.date = calendar.timeInMillis // 현재 날짜로 설정
+        calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
+            val calendar = Calendar.getInstance()
+            calendarView.date = calendar.timeInMillis // 현재 날짜로 설정
+            calendar.set(Calendar.YEAR, year)
+            calendar.set(Calendar.MONTH, month)
+            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+
+            // 클릭한 날짜로부터 해당 주의 시작일과 종료일 계산
+            val selectedDate = calendar.time
+            val startOfWeek = Calendar.getInstance()
+            startOfWeek.time = selectedDate
+            startOfWeek.set(Calendar.DAY_OF_WEEK, startOfWeek.firstDayOfWeek)
+            startOfWeek.set(Calendar.HOUR_OF_DAY, 0)
+            startOfWeek.set(Calendar.MINUTE, 0)
+            startOfWeek.set(Calendar.SECOND, 0)
+
+            val endOfWeek = Calendar.getInstance()
+            endOfWeek.time = selectedDate
+            endOfWeek.set(Calendar.DAY_OF_WEEK, endOfWeek.firstDayOfWeek + 6)
+            endOfWeek.set(Calendar.HOUR_OF_DAY, 23)
+            endOfWeek.set(Calendar.MINUTE, 59)
+            endOfWeek.set(Calendar.SECOND, 59)
+
+            // 시작일과 종료일 사이의 모든 날짜 선택
+            calendarView.setDate(startOfWeek.timeInMillis, false, true)
+            while (calendar.before(endOfWeek)) {
+                calendar.add(Calendar.DATE, 1)
+                calendarView.setDate(calendar.timeInMillis, false, true)
+            }
+        }
 
         // '일정 추가하기' 버튼을 클릭하면 슬라이딩 패널이 확장됩니다.
         addScheduleButton.setOnClickListener {
@@ -98,18 +127,38 @@ class ScheduleSetting : AppCompatActivity() {
             // 주 선택 버튼을 클릭했을 때 수행할 작업
         }
 
-        firstScheduleButton.setOnClickListener {
-            // 첫 번째 일정 버튼을 클릭했을 때 수행할 작업
-        }
-
-        secondScheduleButton.setOnClickListener {
-            // 두 번째 일정 버튼을 클릭했을 때 수행할 작업
-        }
-
         val cancelTextView = findViewById<TextView>(R.id.cancle)
         cancelTextView.setOnClickListener {
             slidingLayout.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
         }
+
+        val addTextView = findViewById<TextView>(R.id.add)
+        addTextView.setOnClickListener {
+            val titleText = titleInput.text.toString()
+            val detailText = detailInput
+            val startTimeText = "${startYearInput.text} ${startHourInput.text}:00"
+            val endTimeText = "${endYearInput.text} ${endHourInput.text}:00"
+
+            val newSchedule = ScheduleDto(0, titleText, detailText, startTimeText, endTimeText)
+
+            addScheduleFunc(retrofit, newSchedule)
+        }
+
+        val recyclerView = findViewById<RecyclerView>(R.id.schedule_recycler_view)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        val scheduleList = generateScheduleList()
+        val adapter = ScheduleSettingAdapter(scheduleList)
+        recyclerView.adapter = adapter
+
+
+    }
+    private fun generateScheduleList(): List<ScheduleItem> {
+        val scheduleList = ArrayList<ScheduleItem>()
+        for (i in 1..5) {
+            val scheduleText = "${i}st_schedule"
+            scheduleList.add(ScheduleItem(scheduleText))
+        }
+        return scheduleList
     }
 
     private suspend fun getSchedules(retrofit: Retrofit) : ArrayList<Schedules> {
