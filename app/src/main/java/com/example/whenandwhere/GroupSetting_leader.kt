@@ -3,6 +3,7 @@ package com.example.whenandwhere
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.ImageView
@@ -10,6 +11,10 @@ import android.widget.RadioButton
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.example.whenandwhere.databinding.ActivityGroupSettingLeaderBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.create
 
 class GroupSetting_leader : AppCompatActivity() {
 
@@ -25,6 +30,11 @@ class GroupSetting_leader : AppCompatActivity() {
         val acceptButton : Button = findViewById(R.id.acceptBtn) //가입 허락 버튼
         val removeButton:Button = findViewById(R.id.removeGroupBtn) //그룹 삭제 버튼
 
+        // http 세팅
+        val jwt = HttpUtil().getJWTFromSharedPreference(this) ?: ""
+        val client = HttpUtil().createClient(jwt)
+        val retrofit = HttpUtil().createRetrofitWithHeader(client)
+        val groupId = HttpUtil().getCurrentGroupIdFromSharedPreference(this)
 
         back.setOnClickListener {
             val intent = Intent(this, Grouphome::class.java)
@@ -56,6 +66,30 @@ class GroupSetting_leader : AppCompatActivity() {
             dialogView.findViewById<Button>(R.id.yesButton).setOnClickListener {
                 alertDialog.dismiss()
                 // "예" 버튼을 클릭할 때 수행할 작업 추가
+                val apiService = retrofit.create(ApiService::class.java)
+                val call = apiService.exitGroup(groupId)
+
+                call.enqueue(object : Callback<ObjectDto> {
+                    override fun onResponse(call: Call<ObjectDto>, response: Response<ObjectDto>) {
+                        Log.d("http" , "${response.code()}")
+                        if(response.code() == 200){
+                            val intent = Intent(this@GroupSetting_leader, GrouplistActivity::class.java)
+                            startActivity(intent)
+                        }
+                        else if(response.code() == 400){
+                            // 잘못된 요청에 대한 처리
+                        }
+                        else if(response.code()== 404){
+                            // 잘못된 권한에 대한 처리(HOST는 나갈 수 없다)
+                        }
+                    }
+
+                    override fun onFailure(call: Call<ObjectDto>, t: Throwable) {
+                        Log.d("ERRR", "에러 이유 : $t")
+                        // 네트워크 오류 처리
+                    }
+                })
+
             }
 
             // Negative 버튼 클릭 리스너 설정
@@ -85,6 +119,23 @@ class GroupSetting_leader : AppCompatActivity() {
             dialogView.findViewById<Button>(R.id.yesButton).setOnClickListener {
                 alertDialog.dismiss()
                 // "예" 버튼을 클릭할 때 수행할 작업 추가
+                val apiService = retrofit.create(ApiService::class.java)
+                val call = apiService.deleteGroup(GroupDto(groupId, "", ""))
+
+                call.enqueue(object : Callback<ObjectDto> {
+                    override fun onResponse(call: Call<ObjectDto>, response: Response<ObjectDto>) {
+                        Log.d("http" , "${response.code()}")
+                        if(response.code() == 200){
+                            val intent = Intent(this@GroupSetting_leader, GrouplistActivity::class.java)
+                            startActivity(intent)
+                        }
+                    }
+
+                    override fun onFailure(call: Call<ObjectDto>, t: Throwable) {
+                        Log.d("ERRR", "에러 이유 : $t")
+                        // 네트워크 오류 처리
+                    }
+                })
             }
 
             // Negative 버튼 클릭 리스너 설정

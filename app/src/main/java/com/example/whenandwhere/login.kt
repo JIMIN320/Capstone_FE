@@ -70,10 +70,40 @@ class login : AppCompatActivity() {
             }
         })
     }
+    private fun testFunc() {
+        // API 서비스 인스턴스 생성
+        val apiService = retrofit.create(ApiService::class.java)
 
+        val call = apiService.testData()
+        call.enqueue(object : Callback<ObjectDto> {
+            override fun onResponse(call: Call<ObjectDto>, response: Response<ObjectDto>) {
+                Log.d("http", "${response.code()}")
+
+                if (response.isSuccessful) {
+                    val responseData = response.body()
+                    // 응답 데이터 로그
+                    responseData?.let {
+                        Log.d("ApiTest", "테스트 데이터: ${it.message}")
+                        // 회원이 아니면 true, 맞으면 email 값 반환
+                    }
+                    // 예: responseData를 TextView에 설정하거나, 다른 작업을 수행할 수 있습니다.
+                } else {
+                    // 요청 실패 처리
+                    Log.d("ERRR", "실패")
+                }
+            }
+
+            override fun onFailure(call: Call<ObjectDto>, t: Throwable) {
+                Log.d("ERRR", "에러 이유 : $t")
+                // 네트워크 오류 처리
+            }
+        })
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        testFunc()
 
         val loginbtn: Button = findViewById(R.id.login)
         loginbtn.setOnClickListener {

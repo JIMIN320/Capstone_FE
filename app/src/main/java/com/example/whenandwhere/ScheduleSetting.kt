@@ -15,6 +15,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,10 +23,18 @@ import retrofit2.Retrofit
 import java.util.*
 
 class ScheduleSetting : AppCompatActivity() {
-    @SuppressLint("MissingInflatedId")
+    private lateinit var scheduleTitleText : TextView
+    @SuppressLint("MissingInflatedId", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_schedule_setting)
+
+        val intent = intent
+        val userId = intent.getStringExtra("memberId")
+        val userNick = intent.getStringExtra("memberNickname")
+        Log.d("DATA", "${userId.toString()} $userNick")
+        scheduleTitleText = findViewById(R.id.schedule_title)
+        scheduleTitleText.text = "$userNick 의 일정"
 
         // Retrofit 객체 생성
         val jwt = HttpUtil().getJWTFromSharedPreference(this) ?: ""

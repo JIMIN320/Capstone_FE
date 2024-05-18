@@ -18,7 +18,7 @@ import retrofit2.Retrofit
 
 class ScheduleTitle : AppCompatActivity() {
     private lateinit var backbutton: ImageView
-    private var scheduleList: List<scheduleClass> = emptyList()
+    private var scheduleList = mutableListOf<scheduleClass>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,22 +26,26 @@ class ScheduleTitle : AppCompatActivity() {
 
         backbutton = findViewById(R.id.arrowleft2)
 
-
-
-
         // Retrofit 객체 생성
         val jwt = HttpUtil().getJWTFromSharedPreference(this) ?: ""
         val client = HttpUtil().createClient(jwt)
         val retrofit = HttpUtil().createRetrofitWithHeader(client)
 
+        // RecyclerView 설정
+        val recyclerView: RecyclerView = findViewById(R.id.list)
+        val adapter = ScheduleAdapter(this, scheduleList)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
         // api 실행 및 그룹 리스트 매핑시키기
         lifecycleScope.launch {
             val memberList = getMembers(retrofit)
-            Log.d("MemberList", "${memberList}")
-            /*val adapter = MemberAdapter(this@ScheduleTitle, grouplist)
-
-            binding.recyclerView.layoutManager = LinearLayoutManager(this@ScheduleTitle)
-            binding.recyclerView.adapter = adapter*/
+            for(member in memberList){
+                if(member.id != null && member.nickname != null){
+                    scheduleList.add(scheduleClass(member.id, member.nickname))
+                }
+            }
+            adapter.notifyDataSetChanged()
         }
 
         backbutton.setOnClickListener {
@@ -55,28 +59,9 @@ class ScheduleTitle : AppCompatActivity() {
             val intent = Intent(this, EditPlace::class.java)
             startActivity(intent)
         }
-
-
-
-        // scheduleList에 데이터 추가
-        scheduleList = listOf(
-            scheduleClass(1, "일정 1"),
-            scheduleClass(2, "일정 2"),
-            scheduleClass(3, "일정 3")
-        )
-
-        // RecyclerView 설정
-        val recyclerView: RecyclerView = findViewById(R.id.list)
-        val adapter = ScheduleAdapter(scheduleList)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        // RecyclerView 갱신
-        adapter.notifyDataSetChanged()
-
     }
 
-    private suspend fun getMembers(retrofit: Retrofit): ArrayList<Members>? {
+    private suspend fun getMembers(retrofit: Retrofit): ArrayList<Members> {
         return withContext(Dispatchers.IO) {
 
             val groupId = HttpUtil().getCurrentGroupIdFromSharedPreference(this@ScheduleTitle)
