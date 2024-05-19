@@ -7,7 +7,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-val URL = "http://43.201.72.114:8080"
+val URL = "http://13.125.47.200:8080"
 
 class HttpUtil {
     // URL을 넘겨주는 함수

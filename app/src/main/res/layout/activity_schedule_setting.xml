@@ -44,29 +44,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <CalendarView
+        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
             android:id="@+id/calendarView"
-            android:layout_width="347dp"
-            android:layout_height="305dp"
-            android:layout_marginTop="24dp"
-            android:selectedWeekBackgroundColor="#FF5722"
+            android:layout_width="0dp"
+            android:layout_height="427dp"
+            android:layout_weight="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/schedule_title" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/select_week"
-            android:layout_width="305dp"
-            android:layout_height="36dp"
-            android:layout_marginTop="140dp"
-            android:background="@drawable/button_border"
-            android:gravity="center"
-            android:textColor="@android:color/black"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.511"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/calendarView" />
+            app:layout_constraintTop_toBottomOf="@+id/schedule_title"
+            app:mcv_selectionColor="#F37D3B"
+            app:mcv_showOtherDates="all" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/add_schedule"
@@ -81,16 +68,77 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/schedule_recycler_view"
-            android:layout_width="411dp"
-            android:layout_height="255dp"
-            android:layout_marginStart="24dp"
+            android:layout_width="0dp"
+            android:layout_height="154dp"
             android:layout_marginTop="24dp"
-            android:layout_marginEnd="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.489"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/add_schedule" />
+            app:layout_constraintTop_toBottomOf="@+id/add_schedule"
+            app:layout_constraintVertical_bias="0.0" />
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/delete_schedule_popup"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.8"
+            android:background="#FF000000"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:elevation="4dp"
+                android:padding="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/delete_message_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="일정을 삭제하시겠습니까?"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/delete_message_text">
+
+                    <Button
+                        android:id="@+id/delete_schedule_confirm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:backgroundTint="#FF0000"
+                        android:text="삭제"
+                        android:textColor="@android:color/white" />
+
+                    <Button
+                        android:id="@+id/delete_schedule_cancel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="취소" />
+
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -104,7 +152,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
