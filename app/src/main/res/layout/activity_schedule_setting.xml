@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     tools:context=".Grouphome"
     android:gravity="bottom"
-    app:umanoDragView="@id/slide_layout"
+    app:umanoDragView="@id/slidingPanel"
     app:umanoOverlay="true"
     app:umanoPanelHeight="0dp"
     app:umanoAnchorPoint="0.5"
