@@ -14,7 +14,7 @@ class TimeResultActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTimeResultBinding
     private lateinit var pagerAdapter: MyAdapter
     private val numPage = 2000 // 페이지 수
-    private val currentMonth = Calendar.getInstance().get(Calendar.MONTH) // 현재 월을 가져옴
+    val currentMonth = Calendar.getInstance().get(Calendar.MONTH) +2 // 현재 월을 가져옴
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
