@@ -75,6 +75,9 @@ dependencies {
     implementation ("androidx.viewpager2:viewpager2:1.0.0")
     implementation ("me.relex:circleindicator:2.1.6")
 
+    //customcalendar(1줄)
+    implementation("com.prolificinteractive:material-calendarview:1.4.3")
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

@@ -4,20 +4,22 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.CalendarView
+import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.prolificinteractive.materialcalendarview.CalendarDay
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,7 +28,12 @@ import java.util.*
 
 
 class ScheduleSetting : AppCompatActivity() {
-    private lateinit var scheduleTitleText : TextView
+    private lateinit var scheduleTitleText: TextView
+    private lateinit var scheduleList: MutableList<ScheduleItem>
+    private lateinit var selectedSchedule: ScheduleItem // 선택된 스케줄을 저장하는 변수
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var deletePopup: View // 삭제 팝업
+
     @SuppressLint("MissingInflatedId", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,9 +52,9 @@ class ScheduleSetting : AppCompatActivity() {
         val retrofit = HttpUtil().createRetrofitWithHeader(client)
 
         // api 실행 및 그룹 리스트 매핑시키기
-        lifecycleScope.launch{
+        lifecycleScope.launch {
             val scheduleList = getSchedules(retrofit)
-            Log.d("MemberList" , "${scheduleList}")
+            Log.d("MemberList", "${scheduleList}")
         }
 
         // SlidingUpPanelLayout에 대한 참조를 가져옵니다.
@@ -55,7 +62,6 @@ class ScheduleSetting : AppCompatActivity() {
 
         // 각 뷰에 대한 참조를 가져옵니다.
         val backButton = findViewById<ImageView>(R.id.arrowleft)
-        val selectWeekButton = findViewById<AppCompatButton>(R.id.select_week)
         val addScheduleButton = findViewById<AppCompatButton>(R.id.add_schedule)
 
         // 일정 추가에 대한 뷰들의 참조를 가져옵니다
@@ -73,37 +79,10 @@ class ScheduleSetting : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val calendarView = findViewById<CalendarView>(R.id.calendarView)
-        calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
-            val calendar = Calendar.getInstance()
-            calendarView.date = calendar.timeInMillis // 현재 날짜로 설정
-            calendar.set(Calendar.YEAR, year)
-            calendar.set(Calendar.MONTH, month)
-            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        //customCalendarview(2줄)
+        val materialCalendarView: MaterialCalendarView = findViewById(R.id.calendarView)
+        materialCalendarView.setSelectedDate(CalendarDay.today())
 
-            // 클릭한 날짜로부터 해당 주의 시작일과 종료일 계산
-            val selectedDate = calendar.time
-            val startOfWeek = Calendar.getInstance()
-            startOfWeek.time = selectedDate
-            startOfWeek.set(Calendar.DAY_OF_WEEK, startOfWeek.firstDayOfWeek)
-            startOfWeek.set(Calendar.HOUR_OF_DAY, 0)
-            startOfWeek.set(Calendar.MINUTE, 0)
-            startOfWeek.set(Calendar.SECOND, 0)
-
-            val endOfWeek = Calendar.getInstance()
-            endOfWeek.time = selectedDate
-            endOfWeek.set(Calendar.DAY_OF_WEEK, endOfWeek.firstDayOfWeek + 6)
-            endOfWeek.set(Calendar.HOUR_OF_DAY, 23)
-            endOfWeek.set(Calendar.MINUTE, 59)
-            endOfWeek.set(Calendar.SECOND, 59)
-
-            // 시작일과 종료일 사이의 모든 날짜 선택
-            calendarView.setDate(startOfWeek.timeInMillis, false, true)
-            while (calendar.before(endOfWeek)) {
-                calendar.add(Calendar.DATE, 1)
-                calendarView.setDate(calendar.timeInMillis, false, true)
-            }
-        }
 
         // '일정 추가하기' 버튼을 클릭하면 슬라이딩 패널이 확장됩니다.
         addScheduleButton.setOnClickListener {
@@ -120,11 +99,6 @@ class ScheduleSetting : AppCompatActivity() {
             Log.d("Input Text", "$titleText $detailText $startTimeText $endTimeText")
             val newSchedule = ScheduleDto(0, titleText, detailText, startTimeText, endTimeText)
             addScheduleFunc(retrofit, newSchedule)
-        }
-
-        // 다른 버튼의 클릭 리스너 예시
-        selectWeekButton.setOnClickListener {
-            // 주 선택 버튼을 클릭했을 때 수행할 작업
         }
 
         val cancelTextView = findViewById<TextView>(R.id.cancle)
@@ -144,14 +118,55 @@ class ScheduleSetting : AppCompatActivity() {
             addScheduleFunc(retrofit, newSchedule)
         }
 
+        val scheduleList = generateScheduleList().toMutableList()
+
+
         val recyclerView = findViewById<RecyclerView>(R.id.schedule_recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        val scheduleList = generateScheduleList()
-        val adapter = ScheduleSettingAdapter(scheduleList)
+        val adapter = ScheduleSettingAdapter(scheduleList) { scheduleItem ->
+            showDeletePopup(scheduleItem)
+        }
         recyclerView.adapter = adapter
 
+        deletePopup = findViewById<View>(R.id.delete_schedule_popup)
+        val deleteConfirmButton = findViewById<Button>(R.id.delete_schedule_confirm)
+        val deleteCancelButton = findViewById<Button>(R.id.delete_schedule_cancel)
+
+        deleteConfirmButton.setOnClickListener {
+            deleteSchedule(selectedSchedule)
+            deletePopup.visibility = View.GONE
+        }
+
+        deleteCancelButton.setOnClickListener {
+            deletePopup.visibility = View.GONE
+        }
+
+        materialCalendarView.setOnDateChangedListener { widget, date, selected ->
+            selectWeek(widget, date)
+        }
 
     }
+
+    private fun showDeletePopup(scheduleItem: ScheduleItem) {
+        selectedSchedule = scheduleItem
+        deletePopup.visibility = View.VISIBLE // 삭제 팝업을 보이도록 설정
+    }
+
+    private fun deleteSchedule(scheduleItem: ScheduleItem) {
+        // 스케줄 목록에서 삭제
+        scheduleList.remove(scheduleItem)
+        recyclerView.adapter?.notifyDataSetChanged()
+    }
+
+        private fun generateScheduleList(): List<ScheduleItem> {
+        val scheduleList = ArrayList<ScheduleItem>()
+        for (i in 1..5) {
+            val scheduleText = "${i}st_schedule"
+            scheduleList.add(ScheduleItem(scheduleText))
+        }
+        return scheduleList
+    }
+}
     private fun generateScheduleList(): List<ScheduleItem> {
         val scheduleList = ArrayList<ScheduleItem>()
         for (i in 1..5) {
@@ -160,6 +175,24 @@ class ScheduleSetting : AppCompatActivity() {
         }
         return scheduleList
     }
+
+private fun selectWeek(widget: MaterialCalendarView, date: CalendarDay) {
+    val calendar = Calendar.getInstance()
+    calendar.set(date.year, date.month, date.day)
+    val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1 // 일요일이 1이므로 0으로 만듦
+    calendar.add(Calendar.DAY_OF_MONTH, -dayOfWeek)
+    val startDate = calendar.time
+    val endDate = Calendar.getInstance()
+    endDate.time = startDate
+    endDate.add(Calendar.DAY_OF_MONTH, 6) // 선택된 날짜로부터 6일 후까지의 날짜를 종료일로 설정
+
+    widget.clearSelection()
+    calendar.time = startDate
+    while (calendar.time <= endDate.time) {
+        widget.setDateSelected(CalendarDay.from(calendar), true)
+        calendar.add(Calendar.DAY_OF_MONTH, 1)
+    }
+}
 
     private suspend fun getSchedules(retrofit: Retrofit) : ArrayList<Schedules> {
         return withContext(Dispatchers.IO) {
@@ -227,4 +260,3 @@ class ScheduleSetting : AppCompatActivity() {
             }
         })
     }
-}
