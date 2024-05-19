@@ -24,9 +24,10 @@ class ai_result : AppCompatActivity() {
         val booleanValue = intent.getBooleanExtra("booleanValue", false) //음주여부
         val selectedPlace = intent.getStringExtra("SELECTED_PLACE")  //선택된 중간 장소
 
-// 로그로 전달된 값을 확인합니다
+        // 로그로 전달된 값을 확인합니다
         Log.d("ai_result", "Boolean 값: $booleanValue")
         Log.d("ai_result", "선택된 장소: $selectedPlace")
+
         val back: ImageView = findViewById(R.id.arrowleft)
 
         back.setOnClickListener{
@@ -43,6 +44,7 @@ class ai_result : AppCompatActivity() {
         val retryBtn : Button = findViewById(R.id.retry)
         retryBtn.setOnClickListener {
             count++
+            Log.d("ai_result","횟수: $count")
         }
 
     }

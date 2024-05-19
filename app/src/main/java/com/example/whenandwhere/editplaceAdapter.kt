@@ -1,22 +1,20 @@
+package com.example.whenandwhere
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.whenandwhere.R
-import com.example.whenandwhere.editplaceClass
 
 class editplaceAdapter(
-    private val items: List<editplaceClass>,
-    private val onInputButtonClickListener: (editplaceClass) -> Unit,
-    private val onIconToggleClickListener: (editplaceClass) -> Unit
+    private val items: List<editplaceClass>
 ) : RecyclerView.Adapter<editplaceAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val userNameTextView: TextView = view.findViewById(R.id.username)
-        val inputButton: Button = view.findViewById(R.id.inputbtn)
+        val inputButton: EditText = view.findViewById(R.id.inputbtn)
         val iconButton: ImageButton = view.findViewById(R.id.imageView_trans1)
     }
 
@@ -29,18 +27,20 @@ class editplaceAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
         holder.userNameTextView.text = item.userName
-        holder.inputButton.text = item.departurePlace
+        holder.inputButton.setText(item.departurePlace)
         holder.iconButton.setImageResource(
-            if (item.isCarIcon) R.drawable.car_orange else R.drawable.bus_orange)
+            if (item.isCarIcon) R.drawable.car_orange else R.drawable.bus_orange
+        )
 
         holder.inputButton.setOnClickListener {
-            onInputButtonClickListener(item)
+            // 주소 검색 액티비티 시작 코드 여기에 추가
         }
 
         holder.iconButton.setOnClickListener {
             item.isCarIcon = !item.isCarIcon
-            notifyItemChanged(position)
-            onIconToggleClickListener(item)
+            holder.iconButton.setImageResource(
+                if (item.isCarIcon) R.drawable.car_orange else R.drawable.bus_orange
+            )
         }
     }
 
