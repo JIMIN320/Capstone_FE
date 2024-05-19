@@ -20,8 +20,8 @@ class memberAdd : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_member_add)
 
-        val back: ImageView = findViewById(R.id.arrowleft)
-        val shareLink: Button = findViewById(R.id.sharelink)
+        val back : ImageView = findViewById(R.id.arrowleft)
+        val shareLink : Button = findViewById(R.id.sharelink)
 
         // 뒤로가기 버튼
         back.setOnClickListener {

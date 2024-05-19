@@ -31,13 +31,23 @@
 
         <Button
             android:id="@+id/accept"
-            android:layout_width="60dp"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            android:background="#EEEEEE"
+            android:fontFamily="@font/pretendard_bold"
+            android:text="수락"
+            android:textSize="10sp" />
+
+        <Button
+            android:id="@+id/noaccept"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_marginVertical="10dp"
             android:background="#EEEEEE"
             android:fontFamily="@font/pretendard_bold"
-            android:text="수락하기"
+            android:text="거절"
             android:textSize="10sp" />
 
     </LinearLayout>
