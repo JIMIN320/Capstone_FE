@@ -25,7 +25,7 @@ class EditPlace : AppCompatActivity() {
 
         val arrowLeft = findViewById<ImageView>(R.id.arrowleft)
         arrowLeft.setOnClickListener {
-            val intent = Intent(this, Grouphome::class.java)
+            val intent = Intent(this, ScheduleTitle::class.java)
             startActivity(intent)
         }
 
