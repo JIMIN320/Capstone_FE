@@ -2,20 +2,22 @@ package com.example.whenandwhere
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.launch
 
 class EditPlace : AppCompatActivity() {
-
+    val editPlaceList = ArrayList<editplaceClass>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_place)
 
-        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        val memberList = intent.getStringArrayListExtra("memberNicknameList")
 
         val resultButton = findViewById<Button>(R.id.resultbutton)
         resultButton.setOnClickListener {
@@ -25,16 +27,22 @@ class EditPlace : AppCompatActivity() {
 
         val arrowLeft = findViewById<ImageView>(R.id.arrowleft)
         arrowLeft.setOnClickListener {
-            val intent = Intent(this, Grouphome::class.java)
+            val intent = Intent(this, ScheduleTitle::class.java)
             startActivity(intent)
         }
 
-        val items = listOf(
-            editplaceClass("홍길동", "", true),
-            editplaceClass("김철수", "", false)
-        )
+        // api 실행 및 그룹 리스트 매핑시키기
+        lifecycleScope.launch {
+            if (!memberList.isNullOrEmpty()) {
+                for (member in memberList) {
+                    editPlaceList.add(editplaceClass(member,"", true))
+                }
+            }
+            val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
+            recyclerView.layoutManager = LinearLayoutManager(this@EditPlace)
+            val adapter = editplaceAdapter(editPlaceList)
+            recyclerView.adapter = adapter
 
-        val adapter = editplaceAdapter(items)
-        recyclerView.adapter = adapter
+        }
     }
 }

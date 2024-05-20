@@ -1,6 +1,7 @@
 package com.example.whenandwhere
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -25,6 +26,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class ScheduleSetting : AppCompatActivity() {
@@ -38,24 +40,6 @@ class ScheduleSetting : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_schedule_setting)
-
-        val intent = intent
-        val userId = intent.getStringExtra("memberId")
-        val userNick = intent.getStringExtra("memberNickname")
-        Log.d("DATA", "${userId.toString()} $userNick")
-        scheduleTitleText = findViewById(R.id.schedule_title)
-        scheduleTitleText.text = "$userNick 의 일정"
-
-        // Retrofit 객체 생성
-        val jwt = HttpUtil().getJWTFromSharedPreference(this) ?: ""
-        val client = HttpUtil().createClient(jwt)
-        val retrofit = HttpUtil().createRetrofitWithHeader(client)
-
-        // api 실행 및 그룹 리스트 매핑시키기
-        lifecycleScope.launch {
-            val scheduleList = getSchedules(retrofit)
-            Log.d("MemberList", "${scheduleList}")
-        }
 
         // SlidingUpPanelLayout에 대한 참조를 가져옵니다.
         val slidingLayout = findViewById<SlidingUpPanelLayout>(R.id.main_frame)
@@ -72,6 +56,32 @@ class ScheduleSetting : AppCompatActivity() {
         val startHourInput = findViewById<EditText>(R.id.starthourinput)
         val endYearInput = findViewById<EditText>(R.id.endyearinput)
         val endHourInput = findViewById<EditText>(R.id.endhourinput)
+
+        // 넘겨받은 데이터 및 매핑
+        val intent = intent
+        val userId = intent.getStringExtra("memberId")
+        val userNick = intent.getStringExtra("memberNickname")
+        Log.d("DATA", "${userId.toString()} $userNick")
+        scheduleTitleText = findViewById(R.id.schedule_title)
+        scheduleTitleText.text = "$userNick 의 일정"
+
+        // Retrofit 객체 생성
+        val jwt = HttpUtil().getJWTFromSharedPreference(this) ?: ""
+        val client = HttpUtil().createClient(jwt)
+        val retrofit = HttpUtil().createRetrofitWithHeader(client)
+
+        // api 실행 및 그룹 리스트 매핑시키기
+        lifecycleScope.launch {
+            scheduleList = getSchedules(intent, retrofit)
+            Log.d("ScheduleList", "${scheduleList}")
+            val recyclerView = findViewById<RecyclerView>(R.id.schedule_recycler_view)
+            recyclerView.layoutManager = LinearLayoutManager(this@ScheduleSetting)
+            val adapter = ScheduleSettingAdapter(scheduleList) { scheduleItem ->
+                showDeletePopup(scheduleItem)
+            }
+            recyclerView.adapter = adapter
+
+        }
 
         // 각 뷰에 대한 클릭 리스너를 설정합니다.
         backButton.setOnClickListener {
@@ -118,23 +128,16 @@ class ScheduleSetting : AppCompatActivity() {
             addScheduleFunc(retrofit, newSchedule)
         }
 
-        val scheduleList = generateScheduleList().toMutableList()
-
-
-        val recyclerView = findViewById<RecyclerView>(R.id.schedule_recycler_view)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        val adapter = ScheduleSettingAdapter(scheduleList) { scheduleItem ->
-            showDeletePopup(scheduleItem)
-        }
-        recyclerView.adapter = adapter
-
         deletePopup = findViewById<View>(R.id.delete_schedule_popup)
         val deleteConfirmButton = findViewById<Button>(R.id.delete_schedule_confirm)
         val deleteCancelButton = findViewById<Button>(R.id.delete_schedule_cancel)
 
         deleteConfirmButton.setOnClickListener {
-            deleteSchedule(selectedSchedule)
             deletePopup.visibility = View.GONE
+            deleteSchedule(retrofit, selectedSchedule.id)
+            val intent = (this as Activity).intent
+            this.finish() //현재 액티비티 종료 실시
+            this.startActivity(intent) //현재 액티비티 재실행 실시
         }
 
         deleteCancelButton.setOnClickListener {
@@ -151,31 +154,7 @@ class ScheduleSetting : AppCompatActivity() {
         selectedSchedule = scheduleItem
         deletePopup.visibility = View.VISIBLE // 삭제 팝업을 보이도록 설정
     }
-
-    private fun deleteSchedule(scheduleItem: ScheduleItem) {
-        // 스케줄 목록에서 삭제
-        scheduleList.remove(scheduleItem)
-        recyclerView.adapter?.notifyDataSetChanged()
-    }
-
-        private fun generateScheduleList(): List<ScheduleItem> {
-        val scheduleList = ArrayList<ScheduleItem>()
-        for (i in 1..5) {
-            val scheduleText = "${i}st_schedule"
-            scheduleList.add(ScheduleItem(scheduleText))
-        }
-        return scheduleList
-    }
 }
-    private fun generateScheduleList(): List<ScheduleItem> {
-        val scheduleList = ArrayList<ScheduleItem>()
-        for (i in 1..5) {
-            val scheduleText = "${i}st_schedule"
-            scheduleList.add(ScheduleItem(scheduleText))
-        }
-        return scheduleList
-    }
-
 private fun selectWeek(widget: MaterialCalendarView, date: CalendarDay) {
     val calendar = Calendar.getInstance()
     calendar.set(date.year, date.month, date.day)
@@ -194,69 +173,92 @@ private fun selectWeek(widget: MaterialCalendarView, date: CalendarDay) {
     }
 }
 
-    private suspend fun getSchedules(retrofit: Retrofit) : ArrayList<Schedules> {
-        return withContext(Dispatchers.IO) {
+private suspend fun getSchedules(intent : Intent, retrofit: Retrofit) : ArrayList<ScheduleItem> {
+    val userId = intent.getStringExtra("memberId") ?: ""
+    return withContext(Dispatchers.IO) {
 
-            val apiService = retrofit.create(ApiService::class.java)
-            val call = apiService.getSchedules()
+        val apiService = retrofit.create(ApiService::class.java)
+        val call = apiService.getSchedules(userId)
 
-            val response = call.execute()
-            if (response.isSuccessful) {
-                val responseData = response.body()
-                // 응답 데이터 로그
-                responseData?.let {
-                    Log.d("ApiTest", "유저 스케줄: ${it.data}")
-                    val resultList = arrayListOf<Schedules>()
-                    for(schedule in it.data){
-                        resultList.add(Schedules(schedule.id, schedule.title, schedule.detail, schedule.startTime, schedule.endTime))
-                    }
-
-                    return@withContext resultList
+        val response = call.execute()
+        if (response.isSuccessful) {
+            val responseData = response.body()
+            // 응답 데이터 로그
+            responseData?.let {
+                Log.d("ApiTest", "유저 스케줄: ${it.data}")
+                val resultList = arrayListOf<ScheduleItem>()
+                for(schedule in it.data){
+                    resultList.add(ScheduleItem(schedule.id, schedule.title, schedule.detail, schedule.startTime, schedule.endTime))
                 }
+
+                return@withContext resultList
+            }
+            // 예: responseData를 TextView에 설정하거나, 다른 작업을 수행할 수 있습니다.
+        } else {
+            // 요청 실패 처리
+            Log.d("ERRR", "실패")
+        }
+        return@withContext ArrayList()
+    }
+}
+
+private fun deleteSchedule( retrofit: Retrofit, scheduleId : Int) {
+    val apiService = retrofit.create(ApiService::class.java)
+    val call = apiService.deleteSchedule(ScheduleDto(scheduleId, "", "" ,"" , ""))
+
+    call.enqueue(object : Callback<ObjectDto> {
+        override fun onResponse(call: Call<ObjectDto>, response: Response<ObjectDto>) {
+            if (response.code() == 200) {
+                Log.d("ApiTest", "스케줄 삭제 여부: ${response.code()}")
                 // 예: responseData를 TextView에 설정하거나, 다른 작업을 수행할 수 있습니다.
             } else {
                 // 요청 실패 처리
                 Log.d("ERRR", "실패")
             }
-            return@withContext ArrayList()
         }
-    }
+        override fun onFailure(call: Call<ObjectDto>, t: Throwable) {
+            Log.d("ERRR", "에러 이유 : $t")
+            // 네트워크 오류 처리
+        }
+    })
+}
 
-    private fun addScheduleFunc(retrofit: Retrofit, scheduleDto : ScheduleDto){
-        // api 요청
-        val apiService = retrofit.create(ApiService::class.java)
-        val call = apiService.addSchedule(scheduleDto)
 
-        // Validation
-        if(scheduleDto.title.equals("") || scheduleDto.title == null){
-            Log.d("Validation", "title NULL")
-            return
-        }
-        else if(scheduleDto.detail.equals("") || scheduleDto.detail == null){
-            Log.d("Validation", "detail NULL")
-            return
-        }
-        else if(scheduleDto.startTime.equals("") || scheduleDto.startTime == null){
-            Log.d("Validation", "startTime NULL")
-            return
-        }
-        else if(scheduleDto.endTime.equals("") || scheduleDto.endTime == null){
-            Log.d("Validation", "endTime NULL")
-            return
-        }
-        call.enqueue(object : Callback<ObjectDto> {
-            override fun onResponse(call: Call<ObjectDto>, response: Response<ObjectDto>) {
-                if (response.code() == 201) {
-                    Log.d("ApiTest", "스케줄 처리 여부: ${response.code()}")
-                    // 예: responseData를 TextView에 설정하거나, 다른 작업을 수행할 수 있습니다.
-                } else {
-                    // 요청 실패 처리
-                    Log.d("ERRR", "실패")
-                }
-            }
-            override fun onFailure(call: Call<ObjectDto>, t: Throwable) {
-                Log.d("ERRR", "에러 이유 : $t")
-                // 네트워크 오류 처리
-            }
-        })
+private fun addScheduleFunc(retrofit: Retrofit, scheduleDto : ScheduleDto){
+    // api 요청
+    val apiService = retrofit.create(ApiService::class.java)
+    val call = apiService.addSchedule(scheduleDto)
+
+    // Validation
+    if(scheduleDto.title.equals("") || scheduleDto.title == null){
+        Log.d("Validation", "title NULL")
+        return
     }
+    else if(scheduleDto.detail.equals("") || scheduleDto.detail == null){
+        Log.d("Validation", "detail NULL")
+        return
+    }
+    else if(scheduleDto.startTime.equals("") || scheduleDto.startTime == null){
+        Log.d("Validation", "startTime NULL")
+        return
+    }
+    else if(scheduleDto.endTime.equals("") || scheduleDto.endTime == null){
+        Log.d("Validation", "endTime NULL")
+        return
+    }
+    call.enqueue(object : Callback<ObjectDto> {
+        override fun onResponse(call: Call<ObjectDto>, response: Response<ObjectDto>) {
+            if (response.code() == 201) {
+                Log.d("ApiTest", "스케줄 처리 여부: ${response.code()}")
+                // 예: responseData를 TextView에 설정하거나, 다른 작업을 수행할 수 있습니다.
+            } else {
+                // 요청 실패 처리
+                Log.d("ERRR", "실패")
+            }
+        }
+        override fun onFailure(call: Call<ObjectDto>, t: Throwable) {
+            Log.d("ERRR", "에러 이유 : $t")
+            // 네트워크 오류 처리
+        }
+    })
+}

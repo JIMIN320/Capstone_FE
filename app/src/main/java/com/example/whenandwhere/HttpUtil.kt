@@ -7,7 +7,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-val URL = "http://13.125.47.200:8080"
+val URL = "http://192.168.64.1:8080"
+
+val AIURL = "http://34.64.157.20:5000"
 
 class HttpUtil {
     // URL을 넘겨주는 함수
@@ -140,6 +142,35 @@ class HttpUtil {
             // Retrofit 객체 생성
             retrofit = Retrofit.Builder()
                 .baseUrl(URL) // 로컬 서버의 IP 주소와 포트를 지정합니다.
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+            return retrofit
+        }
+    }
+
+    fun createAIRetrofitWithHeader(client : OkHttpClient?) : Retrofit{
+        var retrofit: Retrofit ? = null
+
+        if(client != null){
+            retrofit = Retrofit.Builder()
+                .baseUrl(AIURL) // 로컬 서버의 IP 주소와 포트를 지정합니다.
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+            return retrofit
+        }
+        else{
+            // 빈 헤더 추가
+            val client = OkHttpClient.Builder()
+                .connectTimeout(100, TimeUnit.SECONDS) // 연결 시간 제한을 30초로 설정
+                .readTimeout(100, TimeUnit.SECONDS) // 읽기 시간 제한을 30초로 설정
+                .build()
+
+            // Retrofit 객체 생성
+            retrofit = Retrofit.Builder()
+                .baseUrl(AIURL) // 로컬 서버의 IP 주소와 포트를 지정합니다.
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()

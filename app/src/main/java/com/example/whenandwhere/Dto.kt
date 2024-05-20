@@ -42,6 +42,12 @@ data class ScheduleListDto(
     @SerializedName("message") var message : String
 )
 
+data class AIResultDto(
+    @Expose
+    @SerializedName("data") var data : AIRecommend,
+    @SerializedName("message") var message : String
+)
+
 interface DataDto
 
 data class TokenDto(
@@ -77,3 +83,17 @@ data class ApplyDto(
     val state : Boolean?,
     val decide : Boolean?
 ) : DataDto
+
+
+data class AIRecommend (
+    val restaurantObj : Recommend?,
+    val cafeObj : Recommend?,
+    val drinkObj : Recommend?
+) :DataDto
+
+data class Recommend(
+    val name: String = "",
+    val telephone: String = "",
+    val address : String = "",
+    val keyword: String = ""
+)

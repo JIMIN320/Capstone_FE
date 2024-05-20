@@ -5,6 +5,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
     // 테스트 API
@@ -42,7 +43,7 @@ interface ApiService {
 
     // 스케줄 API
     @GET("api/schedule/get-schedule")
-    fun getSchedules() : Call<ScheduleListDto>
+    fun getSchedules(@Query("userId") userId : String) : Call<ScheduleListDto>
 
     @POST("api/schedule/add")
     fun addSchedule(@Body scheduleDto: ScheduleDto) : Call<ObjectDto>
@@ -53,4 +54,10 @@ interface ApiService {
 
     @POST("api/apply/process")
     fun processApply(@Body applyDto: ApplyDto) : Call<ObjectDto>
+
+    @POST("api/schedule/delete")
+    fun deleteSchedule(@Body scheduleDto: ScheduleDto) : Call<ObjectDto>
+
+    @GET("text/{time}/{address}/{drink}")
+    fun aiRecommend(@Path("time") time : Int, @Path("address") address : String, @Path("drink") drink : Boolean) : Call<AIResultDto>
 }

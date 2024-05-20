@@ -1,12 +1,10 @@
 package com.example.whenandwhere
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,7 +16,7 @@ import retrofit2.Retrofit
 
 class ScheduleTitle : AppCompatActivity() {
     private lateinit var backbutton: ImageView
-    private var scheduleList = mutableListOf<scheduleClass>()
+    private var memberList = mutableListOf<MemberClass>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,18 +31,13 @@ class ScheduleTitle : AppCompatActivity() {
 
         // RecyclerView 설정
         val recyclerView: RecyclerView = findViewById(R.id.list)
-        val adapter = ScheduleAdapter(this, scheduleList)
+        val adapter = MemberAdapter(this, memberList)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         // api 실행 및 그룹 리스트 매핑시키기
         lifecycleScope.launch {
-            val memberList = getMembers(retrofit)
-            for(member in memberList){
-                if(member.id != null && member.nickname != null){
-                    scheduleList.add(scheduleClass(member.id, member.nickname))
-                }
-            }
+            memberList.addAll(getMembers(retrofit))
             adapter.notifyDataSetChanged()
         }
 
@@ -53,15 +46,20 @@ class ScheduleTitle : AppCompatActivity() {
             startActivity(intent)
         }
 
-
-        val resultButton = findViewById<Button>(R.id.resultbutton3)
-        resultButton.setOnClickListener {
+        // 출발지 입력 버튼
+        val entryButton = findViewById<Button>(R.id.resultbutton3)
+        entryButton.setOnClickListener {
+            val memberNicknameList = ArrayList<String>()
+            for(member in memberList){
+                memberNicknameList.add(member.nickname)
+            }
             val intent = Intent(this, EditPlace::class.java)
+            intent.putStringArrayListExtra("memberNicknameList", memberNicknameList)
             startActivity(intent)
         }
     }
 
-    private suspend fun getMembers(retrofit: Retrofit): ArrayList<Members> {
+    private suspend fun getMembers(retrofit: Retrofit): ArrayList<MemberClass> {
         return withContext(Dispatchers.IO) {
 
             val groupId = HttpUtil().getCurrentGroupIdFromSharedPreference(this@ScheduleTitle)
@@ -75,9 +73,9 @@ class ScheduleTitle : AppCompatActivity() {
                 responseData?.let {
                     Log.d("ApiTest", "그룹 멤버: ${it.data}")
                     if (it.data.isNotEmpty()) {
-                        val resultList = arrayListOf<Members>()
+                        val resultList = arrayListOf<MemberClass>()
                         for (member in it.data) {
-                            resultList.add(Members(member.id, member.userId, member.nickname))
+                            resultList.add(MemberClass(member.id, member.userId, member.nickname))
                         }
                         return@withContext resultList
                     }
