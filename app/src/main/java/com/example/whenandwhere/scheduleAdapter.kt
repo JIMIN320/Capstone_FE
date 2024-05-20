@@ -1,45 +1,56 @@
 package com.example.whenandwhere
 
 import android.content.Context
-import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
-class ScheduleAdapter(val context : Context, private val scheduleList: List<scheduleClass>) :
-    RecyclerView.Adapter<ScheduleAdapter.ViewHolder>() {
+class ScheduleAdapter(
+    private val context: Context,
+    private val numRows: Int,
+    private val numColumns: Int
+) : RecyclerView.Adapter<ScheduleAdapter.ViewHolder>() {
+
+    private val selectedCells = mutableSetOf<Pair<Int, Int>>()
+
+    private val defaultBackground: Drawable = ContextCompat.getDrawable(context, R.drawable.box_background)!!
+    private val selectedBackground: Drawable = ContextCompat.getDrawable(context, R.drawable.box_selected_background)!!
+
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val cell: LinearLayout = view.findViewById(R.id.cell)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.schedule_item, parent, false)
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val view = layoutInflater.inflate(R.layout.schedule_item, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val schedule = scheduleList[position]
-        holder.bind(schedule)
+        val row = position / numColumns
+        val column = position % numColumns
 
-        // 아이템 클릭 리스너 설정
-        holder.itemView.setOnClickListener{
-            val intent = Intent(context, ScheduleSetting::class.java).apply{
-                putExtra("memberId", schedule.id)
-                putExtra("memberNickname", schedule.name)
+        val isCellSelected = selectedCells.contains(Pair(row, column))
+
+        holder.cell.background = if (isCellSelected) {
+            selectedBackground
+        } else {
+            defaultBackground
+        }
+
+        holder.cell.setOnClickListener {
+            if (isCellSelected) {
+                selectedCells.remove(Pair(row, column)) // 이미 선택된 경우 해제
+            } else {
+                selectedCells.add(Pair(row, column)) // 선택되지 않은 경우 선택
             }
-            context.startActivity(intent)
+            notifyItemChanged(position)
         }
     }
 
-    override fun getItemCount(): Int {
-        return scheduleList.size
-    }
-
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val nameTextView: TextView = itemView.findViewById(R.id.name)
-
-        fun bind(schedule: scheduleClass) {
-            nameTextView.text = schedule.name
-        }
-    }
+    override fun getItemCount(): Int = numRows * numColumns // 전체 셀 수 반환
 }
