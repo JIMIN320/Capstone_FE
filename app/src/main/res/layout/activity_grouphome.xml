@@ -34,13 +34,13 @@
         android:id="@+id/grouptitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="84dp"
         android:layout_marginTop="24dp"
         android:text="8반 찐따 모임"
         android:textColor="#000000"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/arrowleft"
+        app:layout_constraintStart_toStartOf="@+id/arrowleft"
+        app:layout_constraintEnd_toEndOf="@id/settings"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
