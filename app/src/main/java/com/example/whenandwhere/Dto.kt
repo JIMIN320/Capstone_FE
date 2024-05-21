@@ -1,7 +1,10 @@
 package com.example.whenandwhere
 
+import android.provider.ContactsContract.Data
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import java.time.LocalDateTime
+import java.util.Objects
 
 data class LoginDto (
     @Expose
@@ -68,9 +71,8 @@ data class ScheduleDto(
 
 data class ApplyDto(
     val id : Int,
-    val applyGroupId : Int?,
-    val applierId : String?,
-    val applierNickname : String?,
-    val state : Boolean?,
-    val decide : Boolean?
+    val title : String,
+    val detail : String,
+    val startTime : String,
+    val endTime : String
 ) : DataDto

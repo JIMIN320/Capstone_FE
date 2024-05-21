@@ -233,6 +233,16 @@ class ScheduleSetting : AppCompatActivity() {
         }
         return scheduleList
     }
+}
+
+    private fun generateScheduleList(): List<ScheduleItem> {
+        val scheduleList = ArrayList<ScheduleItem>()
+        for (i in 1..5) {
+            val scheduleText = "${i}st_schedule"
+            scheduleList.add(ScheduleItem(scheduleText))
+        }
+        return scheduleList
+    }
 
     private fun selectWeek(widget: MaterialCalendarView, date: CalendarDay) {
         val calendar = Calendar.getInstance()
@@ -252,10 +262,12 @@ class ScheduleSetting : AppCompatActivity() {
         }
     }
 
-    private suspend fun getSchedules(retrofit: Retrofit): ArrayList<Schedules> {
+    private suspend fun getSchedules(retrofit: Retrofit) : ArrayList<Schedules> {
         return withContext(Dispatchers.IO) {
+
             val apiService = retrofit.create(ApiService::class.java)
             val call = apiService.getSchedules()
+
             val response = call.execute()
             if (response.isSuccessful) {
                 val responseData = response.body()
@@ -263,15 +275,18 @@ class ScheduleSetting : AppCompatActivity() {
                 responseData?.let {
                     Log.d("ApiTest", "유저 스케줄: ${it.data}")
                     val resultList = arrayListOf<Schedules>()
-                    for (schedule in it.data) {
+                    for(schedule in it.data){
                         resultList.add(Schedules(schedule.id, schedule.title, schedule.detail, schedule.startTime, schedule.endTime))
                     }
+
                     return@withContext resultList
                 }
-                ArrayList<Schedules>()
+                // 예: responseData를 TextView에 설정하거나, 다른 작업을 수행할 수 있습니다.
             } else {
-                ArrayList<Schedules>()
+                // 요청 실패 처리
+                Log.d("ERRR", "실패")
             }
+            return@withContext ArrayList()
         }
     }
 
