@@ -6,12 +6,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,19 +26,94 @@ import retrofit2.Retrofit
 import java.util.*
 import kotlin.collections.ArrayList
 
-
 class ScheduleSetting : AppCompatActivity() {
     private lateinit var scheduleTitleText: TextView
     private lateinit var scheduleList: MutableList<ScheduleItem>
     private lateinit var selectedSchedule: ScheduleItem // 선택된 스케줄을 저장하는 변수
     private lateinit var recyclerView: RecyclerView
-    private lateinit var deletePopup: View // 삭제 팝업
+    private lateinit var deletePopup: ConstraintLayout
+    private lateinit var newSlidingPanel: SlidingUpPanelLayout
+
+    private lateinit var startYearPicker: NumberPicker
+    private lateinit var startMonthPicker: NumberPicker
+    private lateinit var startDayPicker: NumberPicker
+    private lateinit var startHourPicker: NumberPicker
+    private lateinit var startMinPicker: NumberPicker
+    private lateinit var endYearPicker: NumberPicker
+    private lateinit var endMonthPicker: NumberPicker
+    private lateinit var endDayPicker: NumberPicker
+    private lateinit var endHourPicker: NumberPicker
+    private lateinit var endMinPicker: NumberPicker
 
     @SuppressLint("MissingInflatedId", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_schedule_setting)
 
+        val intent = intent
+        val userId = intent.getStringExtra("memberId")
+        val userNick = intent.getStringExtra("memberNickname")
+        Log.d("DATA", "${userId.toString()} $userNick")
+        scheduleTitleText = findViewById(R.id.schedule_title)
+        scheduleTitleText.text = "$userNick 의 일정"
+
+        startYearPicker = findViewById(R.id.yearPicker_start)
+        startMonthPicker = findViewById(R.id.monthPicker_start)
+        startDayPicker = findViewById(R.id.daypicker_start)
+        startHourPicker = findViewById(R.id.hourPicker_start)
+        startMinPicker = findViewById(R.id.minPicker_start)
+        endYearPicker = findViewById(R.id.yearPicker_end)
+        endMonthPicker = findViewById(R.id.monthPicker_end)
+        endDayPicker = findViewById(R.id.daypicker_end)
+        endHourPicker = findViewById(R.id.hourPicker_end)
+        endMinPicker = findViewById(R.id.minPicker_end)
+
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+        val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
+
+        startYearPicker.minValue = 2000
+        startYearPicker.maxValue = currentYear + 10
+        startYearPicker.value = currentYear
+
+        startMonthPicker.minValue = 1
+        startMonthPicker.maxValue = 12
+        startMonthPicker.value = currentMonth
+
+        startDayPicker.minValue = 1
+        startDayPicker.maxValue = 31
+
+        startHourPicker.minValue = 0
+        startHourPicker.maxValue = 23
+
+        startMinPicker.minValue = 0
+        startMinPicker.maxValue = 59
+
+        endYearPicker.minValue = 2000
+        endYearPicker.maxValue = currentYear + 10
+        endYearPicker.value = currentYear
+
+        endMonthPicker.minValue = 1
+        endMonthPicker.maxValue = 12
+
+        endDayPicker.minValue = 1
+        endDayPicker.maxValue = 31
+
+        endHourPicker.minValue = 0
+        endHourPicker.maxValue = 23
+
+        endMinPicker.minValue = 0
+        endMinPicker.maxValue = 59
+
+        // Retrofit 객체 생성
+        val jwt = HttpUtil().getJWTFromSharedPreference(this) ?: ""
+        val client = HttpUtil().createClient(jwt)
+        val retrofit = HttpUtil().createRetrofitWithHeader(client)
+
+        // api 실행 및 그룹 리스트 매핑시키기
+        lifecycleScope.launch {
+            val scheduleList = getSchedules(retrofit)
+            Log.d("MemberList", "${scheduleList}")
+        }
         // SlidingUpPanelLayout에 대한 참조를 가져옵니다.
         val slidingLayout = findViewById<SlidingUpPanelLayout>(R.id.main_frame)
 
@@ -49,13 +122,9 @@ class ScheduleSetting : AppCompatActivity() {
         val addScheduleButton = findViewById<AppCompatButton>(R.id.add_schedule)
 
         // 일정 추가에 대한 뷰들의 참조를 가져옵니다
-        val addSdheduleButtonInSlide = findViewById<TextView>(R.id.add)
-        val titleInput = findViewById<EditText>(R.id.schedulename)
-        val detailInput = "세부사항에 대한 INPUT이 있어야 함"
-        val startYearInput = findViewById<EditText>(R.id.startyearinput)
-        val startHourInput = findViewById<EditText>(R.id.starthourinput)
-        val endYearInput = findViewById<EditText>(R.id.endyearinput)
-        val endHourInput = findViewById<EditText>(R.id.endhourinput)
+        val addScheduleButtonInSlide = findViewById<TextView>(R.id.add)
+        val titleInput = findViewById<EditText>(R.id.scheduletitle)
+        val detailInput = findViewById<EditText>(R.id.scheduledetail)
 
         // 넘겨받은 데이터 및 매핑
         val intent = intent
@@ -93,18 +162,17 @@ class ScheduleSetting : AppCompatActivity() {
         val materialCalendarView: MaterialCalendarView = findViewById(R.id.calendarView)
         materialCalendarView.setSelectedDate(CalendarDay.today())
 
-
         // '일정 추가하기' 버튼을 클릭하면 슬라이딩 패널이 확장됩니다.
         addScheduleButton.setOnClickListener {
             slidingLayout.panelState = SlidingUpPanelLayout.PanelState.ANCHORED
         }
 
         // 슬라이드 안의 실제 데이터 추가하기 버튼
-        addSdheduleButtonInSlide.setOnClickListener {
+        addScheduleButtonInSlide.setOnClickListener {
             val titleText = titleInput.text.toString()
-            val detailText = detailInput
-            val startTimeText = "${startYearInput.text} ${startHourInput.text}:00"
-            val endTimeText = "${endYearInput.text} ${endHourInput.text}:00"
+            val detailText = detailInput.text.toString()
+            val startTimeText = "${startYearPicker.value}-${startMonthPicker.value}-${startHourPicker.value}:00"
+            val endTimeText = "${endYearPicker.value}-${endMonthPicker.value}-${endHourPicker.value}:00"
 
             Log.d("Input Text", "$titleText $detailText $startTimeText $endTimeText")
             val newSchedule = ScheduleDto(0, titleText, detailText, startTimeText, endTimeText)
@@ -119,25 +187,41 @@ class ScheduleSetting : AppCompatActivity() {
         val addTextView = findViewById<TextView>(R.id.add)
         addTextView.setOnClickListener {
             val titleText = titleInput.text.toString()
-            val detailText = detailInput
-            val startTimeText = "${startYearInput.text} ${startHourInput.text}:00"
-            val endTimeText = "${endYearInput.text} ${endHourInput.text}:00"
+            val detailText = detailInput.text.toString()
+            val startTimeText = "${startYearPicker.value}-${startMonthPicker.value}-${startHourPicker.value}:00"
+            val endTimeText = "${endYearPicker.value}-${endMonthPicker.value}-${endHourPicker.value}:00"
 
+            Log.d("Input Text", "$titleText $detailText $startTimeText $endTimeText")
             val newSchedule = ScheduleDto(0, titleText, detailText, startTimeText, endTimeText)
-
             addScheduleFunc(retrofit, newSchedule)
         }
 
-        deletePopup = findViewById<View>(R.id.delete_schedule_popup)
+        scheduleList = generateScheduleList().toMutableList()
+
+        scheduleTitleText = findViewById(R.id.schedule_title)
+        recyclerView = findViewById(R.id.schedule_recycler_view)
+
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        val adapter = ScheduleSettingAdapter(scheduleList) { scheduleItem ->
+            showNewSlidingPanel(scheduleItem)
+        }
+        recyclerView.adapter = adapter
+
+
+
+        val deleteScheduleButton = findViewById<Button>(R.id.delete_schedule_button)
+        deleteScheduleButton.setOnClickListener {
+            // 선택된 스케줄을 삭제 팝업에 설정합니다.
+            showDeletePopup(selectedSchedule)
+        }
+
+        deletePopup = findViewById(R.id.delete_schedule_popup)
         val deleteConfirmButton = findViewById<Button>(R.id.delete_schedule_confirm)
         val deleteCancelButton = findViewById<Button>(R.id.delete_schedule_cancel)
 
         deleteConfirmButton.setOnClickListener {
+            deleteSchedule(selectedSchedule)
             deletePopup.visibility = View.GONE
-            deleteSchedule(retrofit, selectedSchedule.id)
-            val intent = (this as Activity).intent
-            this.finish() //현재 액티비티 종료 실시
-            this.startActivity(intent) //현재 액티비티 재실행 실시
         }
 
         deleteCancelButton.setOnClickListener {
@@ -147,31 +231,64 @@ class ScheduleSetting : AppCompatActivity() {
         materialCalendarView.setOnDateChangedListener { widget, date, selected ->
             selectWeek(widget, date)
         }
-
     }
+
+    private fun showNewSlidingPanel(scheduleItem: ScheduleItem) {
+        selectedSchedule = scheduleItem
+        newSlidingPanel.panelState = SlidingUpPanelLayout.PanelState.ANCHORED
+    }
+
 
     private fun showDeletePopup(scheduleItem: ScheduleItem) {
         selectedSchedule = scheduleItem
         deletePopup.visibility = View.VISIBLE // 삭제 팝업을 보이도록 설정
+        val deleteMessageText = deletePopup.findViewById<TextView>(R.id.delete_message_text)
+        deleteMessageText.text = "${scheduleItem.scheduleText} 일정을 삭제하시겠습니까?"
     }
-}
-private fun selectWeek(widget: MaterialCalendarView, date: CalendarDay) {
-    val calendar = Calendar.getInstance()
-    calendar.set(date.year, date.month, date.day)
-    val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1 // 일요일이 1이므로 0으로 만듦
-    calendar.add(Calendar.DAY_OF_MONTH, -dayOfWeek)
-    val startDate = calendar.time
-    val endDate = Calendar.getInstance()
-    endDate.time = startDate
-    endDate.add(Calendar.DAY_OF_MONTH, 6) // 선택된 날짜로부터 6일 후까지의 날짜를 종료일로 설정
 
-    widget.clearSelection()
-    calendar.time = startDate
-    while (calendar.time <= endDate.time) {
-        widget.setDateSelected(CalendarDay.from(calendar), true)
-        calendar.add(Calendar.DAY_OF_MONTH, 1)
+    private fun deleteSchedule(scheduleItem: ScheduleItem) {
+        // 스케줄 목록에서 삭제
+        scheduleList.remove(scheduleItem)
+        recyclerView.adapter?.notifyDataSetChanged()
+    }
+
+    private fun generateScheduleList(): List<ScheduleItem> {
+        val scheduleList = ArrayList<ScheduleItem>()
+        for (i in 1..5) {
+            val scheduleText = "${i}st_schedule"
+            scheduleList.add(ScheduleItem(scheduleText))
+        }
+        return scheduleList
     }
 }
+
+    private fun generateScheduleList(): List<ScheduleItem> {
+        val scheduleList = ArrayList<ScheduleItem>()
+        for (i in 1..5) {
+            val scheduleText = "${i}st_schedule"
+            scheduleList.add(ScheduleItem(scheduleText))
+        }
+        return scheduleList
+    }
+
+    private fun selectWeek(widget: MaterialCalendarView, date: CalendarDay) {
+        val calendar = Calendar.getInstance()
+        calendar.set(date.year, date.month, date.day)
+        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1 // 일요일이 1이므로 0으로 만듦
+        calendar.add(Calendar.DAY_OF_MONTH, -dayOfWeek)
+        val startDate = calendar.time
+        val endDate = Calendar.getInstance()
+        endDate.time = startDate
+        endDate.add(Calendar.DAY_OF_MONTH, 6) // 선택된 날짜로부터 6일 후까지의 날짜를 종료일로 설정
+
+        widget.clearSelection()
+        calendar.time = startDate
+        while (calendar.time <= endDate.time) {
+            widget.setDateSelected(CalendarDay.from(calendar), true)
+            calendar.add(Calendar.DAY_OF_MONTH, 1)
+        }
+    }
+
 
 private suspend fun getSchedules(intent : Intent, retrofit: Retrofit) : ArrayList<ScheduleItem> {
     val userId = intent.getStringExtra("memberId") ?: ""
