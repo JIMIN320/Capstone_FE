@@ -5,11 +5,13 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.lifecycle.lifecycleScope
@@ -128,22 +130,6 @@ class ScheduleSetting : AppCompatActivity() {
             addScheduleFunc(retrofit, newSchedule)
         }
 
-        deletePopup = findViewById<View>(R.id.delete_schedule_popup)
-        val deleteConfirmButton = findViewById<Button>(R.id.delete_schedule_confirm)
-        val deleteCancelButton = findViewById<Button>(R.id.delete_schedule_cancel)
-
-        deleteConfirmButton.setOnClickListener {
-            deletePopup.visibility = View.GONE
-            deleteSchedule(retrofit, selectedSchedule.id)
-            val intent = (this as Activity).intent
-            this.finish() //현재 액티비티 종료 실시
-            this.startActivity(intent) //현재 액티비티 재실행 실시
-        }
-
-        deleteCancelButton.setOnClickListener {
-            deletePopup.visibility = View.GONE
-        }
-
         materialCalendarView.setOnDateChangedListener { widget, date, selected ->
             selectWeek(widget, date)
         }
@@ -151,8 +137,50 @@ class ScheduleSetting : AppCompatActivity() {
     }
 
     private fun showDeletePopup(scheduleItem: ScheduleItem) {
-        selectedSchedule = scheduleItem
-        deletePopup.visibility = View.VISIBLE // 삭제 팝업을 보이도록 설정
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.schedule_popup, null)
+        val alertDialogBuilder = AlertDialog.Builder(this).setView(dialogView)
+        val alertDialog = alertDialogBuilder.create()
+
+        // Populating the dialog with schedule data if needed
+        val TimeTextView = dialogView.findViewById<TextView>(R.id.timetext)
+        TimeTextView.text = "시간 넣기" // 필요한 텍스트로 설정
+
+        // Set up the confirm and cancel buttons
+        dialogView.findViewById<Button>(R.id.deleteSchedule).setOnClickListener {
+            // Handle the confirm button click
+            showSecondPopup()
+            alertDialog.dismiss()
+        }
+
+        dialogView.findViewById<Button>(R.id.cancel).setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        alertDialog.show()
+    }
+
+
+    private fun showSecondPopup() {
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.schedule_second_popup, null)
+        val alertDialogBuilder = AlertDialog.Builder(this).setView(dialogView)
+        val alertDialog = alertDialogBuilder.create()
+
+        // Populating the dialog with schedule data if needed
+        val titleTextView = dialogView.findViewById<TextView>(R.id.titletext)
+        titleTextView.text = "정말 일정을 삭제하시겠습니까?" // 필요한 텍스트로 설정
+
+        // 두 번째 팝업창의 버튼을 설정합니다.
+        dialogView.findViewById<Button>(R.id.deleteCheck).setOnClickListener {
+            // 두 번째 팝업창의 확인 버튼 클릭 시의 동작을 정의합니다.
+
+            alertDialog.dismiss()
+        }
+
+        dialogView.findViewById<Button>(R.id.cancelCheck).setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        alertDialog.show()
     }
 }
 private fun selectWeek(widget: MaterialCalendarView, date: CalendarDay) {

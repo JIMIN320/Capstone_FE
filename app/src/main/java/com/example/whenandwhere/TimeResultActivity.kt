@@ -14,7 +14,7 @@ class TimeResultActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTimeResultBinding
     private lateinit var pagerAdapter: MyAdapter
     private val numPage = 2000 // 페이지 수
-    val currentMonth = Calendar.getInstance().get(Calendar.MONTH) +2 // 현재 월을 가져옴
+    val currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 2 // 현재 월을 가져옴
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,9 +33,8 @@ class TimeResultActivity : AppCompatActivity() {
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
-
-                    // 현재 월과 주차 업데이트
-                    updateMonthAndWeek(position)
+                    updateMonthAndWeek(position) // 멤버 함수 호출
+                    updateBoxesColor(position) // 멤버 함수 호출
                 }
             })
         }
@@ -56,7 +55,21 @@ class TimeResultActivity : AppCompatActivity() {
         }
     }
 
-    // 현재 월과 주차 업데이트하는 함수
+    // 멤버 함수로 변경
+    private fun updateBoxesColor(position: Int) {
+        val newPosition = position % numPage // 현재 페이지 인덱스 계산
+        val startBoxIndex = newPosition * 4 // 시작 상자의 인덱스
+        val endBoxIndex = startBoxIndex + 3 // 마지막 상자의 인덱스
+
+        // 시작 상자부터 마지막 상자까지 순회하면서 오렌지 색상으로 변경
+        for (i in startBoxIndex..endBoxIndex) {
+            // i는 0부터 시작하기 때문에, 실제 뷰의 인덱스는 i + 1이 됩니다.
+            val boxView = binding.root.findViewWithTag<ImageView>("box_${i + 1}")
+            boxView?.setColorFilter(resources.getColor(R.color.main))
+        }
+    }
+
+    // 멤버 함수로 변경
     private fun updateMonthAndWeek(position: Int) {
         val newPosition = position % numPage // 현재 페이지 인덱스 계산
         val newMonth = (currentMonth + (newPosition / 4)) % 12 // 현재 월 업데이트
