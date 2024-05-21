@@ -1,12 +1,9 @@
 package com.example.whenandwhere
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
 class CourseAdapter(val Courselist: ArrayList<Courses>) :
@@ -36,15 +33,15 @@ class CourseAdapter(val Courselist: ArrayList<Courses>) :
     }
 
     class CustomViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview) {
-        val name1 = itemview.findViewById<TextView>(R.id.name1)
-        val distance1 = itemview.findViewById<TextView>(R.id.distance1)
-        val address1 = itemview.findViewById<TextView>(R.id.address1)
-        val name2 = itemview.findViewById<TextView>(R.id.name2)
-        val distance2 = itemview.findViewById<TextView>(R.id.distance2)
-        val address2 = itemview.findViewById<TextView>(R.id.address2)
-        val name3 = itemview.findViewById<TextView>(R.id.name3)
-        val distance3 = itemview.findViewById<TextView>(R.id.distance3)
-        val address3 = itemview.findViewById<TextView>(R.id.address3)
+        val name1 = itemview.findViewById<TextView>(R.id.restaurantname)
+        val distance1 = itemview.findViewById<TextView>(R.id.restaddress)
+        val address1 = itemview.findViewById<TextView>(R.id.restphone)
+        val name2 = itemview.findViewById<TextView>(R.id.cafeplace)
+        val distance2 = itemview.findViewById<TextView>(R.id.cafeaddress)
+        val address2 = itemview.findViewById<TextView>(R.id.cafephone)
+        val name3 = itemview.findViewById<TextView>(R.id.drinkname)
+        val distance3 = itemview.findViewById<TextView>(R.id.drinkaddress)
+        val address3 = itemview.findViewById<TextView>(R.id.drinkphone)
 
     }
 }

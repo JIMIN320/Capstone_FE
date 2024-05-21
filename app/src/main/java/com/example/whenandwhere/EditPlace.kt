@@ -18,6 +18,7 @@ class EditPlace : AppCompatActivity() {
         setContentView(R.layout.activity_edit_place)
 
         val memberList = intent.getStringArrayListExtra("memberNicknameList")
+        val memberIdList = intent.getIntegerArrayListExtra("memberIdList")
 
         val resultButton = findViewById<Button>(R.id.resultbutton)
         resultButton.setOnClickListener {

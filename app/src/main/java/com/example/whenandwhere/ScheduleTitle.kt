@@ -50,11 +50,14 @@ class ScheduleTitle : AppCompatActivity() {
         val entryButton = findViewById<Button>(R.id.resultbutton3)
         entryButton.setOnClickListener {
             val memberNicknameList = ArrayList<String>()
+            val memberIdList = ArrayList<Int>()
             for(member in memberList){
                 memberNicknameList.add(member.nickname)
+                memberIdList.add(member.id)
             }
             val intent = Intent(this, EditPlace::class.java)
             intent.putStringArrayListExtra("memberNicknameList", memberNicknameList)
+            intent.putIntegerArrayListExtra("memberIdList", memberIdList)
             startActivity(intent)
         }
     }

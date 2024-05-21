@@ -48,6 +48,12 @@ data class AIResultDto(
     @SerializedName("message") var message : String
 )
 
+data class RecommendResultDto(
+    @Expose
+    @SerializedName("data") var data : RecommendResult,
+    @SerializedName("message") var message : String
+)
+
 interface DataDto
 
 data class TokenDto(
@@ -97,3 +103,20 @@ data class Recommend(
     val address : String = "",
     val keyword: String = ""
 )
+
+data class RecommendResult(
+    var id: Int? = null,
+    var restTitle: String? = null,
+    var restAddress: String? = null,
+    var restPhone: String? = null,
+    var restHash: String? = null,
+    var cafeTitle: String? = null,
+    var cafeAddress: String? = null,
+    var cafePhone: String? = null,
+    var cafeHash: String? = null,
+    var drinkTitle: String? = null,
+    var drinkAddress: String? = null,
+    var drinkPhone: String? = null,
+    var drinkHash: String? = null,
+    var groupId: Int? = null
+) : DataDto
