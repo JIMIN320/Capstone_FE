@@ -16,11 +16,26 @@ import com.example.whenandwhere.databinding.ActivityMiddleplaceBinding
 class middleplace : AppCompatActivity() {
     private lateinit var binding: ActivityMiddleplaceBinding
     private var alertDialog: AlertDialog? = null // AlertDialog 인스턴스를 저장할 변수 추가
+    private var place1Text = "인천광역시 연수구"
+    private var place2Text = "서울특별시 도봉구"
+    private var place3Text = "과천시"
+    private lateinit var select1Button: RadioButton
+    private lateinit var select2Button: RadioButton
+    private lateinit var select3Button: RadioButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMiddleplaceBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // 초기화
+        select1Button = findViewById(R.id.place1)
+        select2Button = findViewById(R.id.place2)
+        select3Button = findViewById(R.id.place3)
+
+        select1Button.text = place1Text
+        select2Button.text = place2Text
+        select3Button.text = place3Text
 
         val back: ImageView = findViewById(R.id.arrowleft)
         back.setOnClickListener {
