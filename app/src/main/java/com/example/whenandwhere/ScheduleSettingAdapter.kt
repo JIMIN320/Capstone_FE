@@ -18,7 +18,7 @@ class ScheduleSettingAdapter(
 
     override fun onBindViewHolder(holder: ScheduleViewHolder, position: Int) {
         val currentItem = scheduleList[position]
-        holder.textView.text = currentItem.scheduleText
+        holder.textView.text = currentItem.title
         holder.itemView.setOnClickListener {
             onItemClick(currentItem) // 항목 클릭 시 리스너를 호출합니다.
         }

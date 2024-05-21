@@ -42,6 +42,18 @@ data class ScheduleListDto(
     @SerializedName("message") var message : String
 )
 
+data class AIResultDto(
+    @Expose
+    @SerializedName("data") var data : AIRecommend,
+    @SerializedName("message") var message : String
+)
+
+data class RecommendResultDto(
+    @Expose
+    @SerializedName("data") var data : RecommendResult,
+    @SerializedName("message") var message : String
+)
+
 interface DataDto
 
 data class TokenDto(
@@ -62,17 +74,49 @@ data class GroupDto(
 ) : DataDto
 
 data class ScheduleDto(
-    val id: Int,
-    val title: String,
-    val detail: String,
-    val startTime: String,
-    val endTime: String
-): DataDto
-
-data class ApplyDto(
     val id : Int,
     val title : String,
     val detail : String,
     val startTime : String,
     val endTime : String
+): DataDto
+
+data class ApplyDto(
+    val id : Int,
+    val applyGroupId : Int?,
+    val applierId : String?,
+    val applierNickname : String?,
+    val state : Boolean?,
+    val decide : Boolean?
+) : DataDto
+
+
+data class AIRecommend (
+    val restaurantObj : Recommend?,
+    val cafeObj : Recommend?,
+    val drinkObj : Recommend?
+) :DataDto
+
+data class Recommend(
+    val name: String = "",
+    val telephone: String = "",
+    val address : String = "",
+    val keyword: String = ""
+)
+
+data class RecommendResult(
+    var id: Int? = null,
+    var restTitle: String? = null,
+    var restAddress: String? = null,
+    var restPhone: String? = null,
+    var restHash: String? = null,
+    var cafeTitle: String? = null,
+    var cafeAddress: String? = null,
+    var cafePhone: String? = null,
+    var cafeHash: String? = null,
+    var drinkTitle: String? = null,
+    var drinkAddress: String? = null,
+    var drinkPhone: String? = null,
+    var drinkHash: String? = null,
+    var groupId: Int? = null
 ) : DataDto
