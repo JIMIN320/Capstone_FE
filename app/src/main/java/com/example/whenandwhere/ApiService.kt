@@ -60,4 +60,10 @@ interface ApiService {
 
     @GET("text/{time}/{address}/{drink}")
     fun aiRecommend(@Path("time") time : Int, @Path("address") address : String, @Path("drink") drink : Boolean) : Call<AIResultDto>
+
+    @POST("api/result/add-result")
+    fun addRecommend(@Body recommend : RecommendResult) :Call<ObjectDto>
+
+    @GET("api/result/get-result/{groupId}")
+    fun getRecommend(@Path("groupId") groupId : Int) : Call<RecommendResultDto>
 }

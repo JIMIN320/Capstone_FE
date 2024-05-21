@@ -16,9 +16,9 @@ import com.example.whenandwhere.databinding.ActivityMiddleplaceBinding
 class middleplace : AppCompatActivity() {
     private lateinit var binding: ActivityMiddleplaceBinding
     private var alertDialog: AlertDialog? = null // AlertDialog 인스턴스를 저장할 변수 추가
-    private var place1Text = "인천광역시 연수구"
-    private var place2Text = "서울특별시 도봉구"
-    private var place3Text = "과천시"
+    private var place1Text = "인천광역시 연수구 경원대로 480"
+    private var place2Text = "인천 연수구 경원대로 180"
+    private var place3Text = "서울특별시 도봉구"
     private lateinit var select1Button: RadioButton
     private lateinit var select2Button: RadioButton
     private lateinit var select3Button: RadioButton

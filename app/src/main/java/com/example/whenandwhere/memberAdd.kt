@@ -35,7 +35,7 @@ class memberAdd : AppCompatActivity() {
             val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val groupId = HttpUtil().getCurrentGroupIdFromSharedPreference(this)
             val groupName = HttpUtil().getCurrentGroupNameFromSharedPreference(this)
-            val url = "${HttpUtil().getServerURL()}/api/apply/${groupName}#${groupId}"
+            val url = "${HttpUtil().getServerURL()}/oauth?groupId=${groupId}"
             Log.d("URL", url)
             val clip = ClipData.newPlainText("URL", url)
             clipboard.setPrimaryClip(clip)
