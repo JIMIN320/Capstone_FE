@@ -22,8 +22,8 @@ class TimeResultActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTimeResultBinding
     private lateinit var pagerAdapter: MyAdapter
-    private var startDate = ""
-    private var endDate = ""
+    private var startDate = "2024-05-22 13:30:00"
+    private var endDate = "2024-05-22 15:00:00"
     private val numPage = 2000 // 페이지 수
     val currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 2 // 현재 월을 가져옴
 
@@ -70,6 +70,8 @@ class TimeResultActivity : AppCompatActivity() {
         val nextbtn = findViewById<Button>(R.id.resultbutton)
         nextbtn.setOnClickListener {
             val intent = Intent(this, middleplace::class.java)
+            intent.putExtra("startDate", startDate)
+            intent.putExtra("endDate", endDate)
             startActivity(intent)
         }
     }
@@ -135,8 +137,8 @@ class TimeResultActivity : AppCompatActivity() {
         val newMonth = (currentMonth + (newPosition / 4)) % 12 // 현재 월 업데이트
         val newWeek = (newPosition % 4) + 1 // 현재 주차 업데이트
 
-        startDate = "2024-${newMonth + 1}-{여기에 현재 주가 시작하는 날짜}"
-        endDate = "2024-${newMonth + 1}-{여기에 현재 주가 끝나는 날짜}"
+//        startDate = "2024-${newMonth + 1}-{여기에 현재 주가 시작하는 날짜}"
+//        endDate = "2024-${newMonth + 1}-{여기에 현재 주가 끝나는 날짜}"
         // 업데이트된 월과 주차를 UI에 반영
         binding.indicatorText.text = "${newMonth + 1}월 ${newWeek}주차"
     }

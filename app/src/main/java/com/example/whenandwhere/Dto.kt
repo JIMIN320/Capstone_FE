@@ -118,5 +118,8 @@ data class RecommendResult(
     var drinkAddress: String? = null,
     var drinkPhone: String? = null,
     var drinkHash: String? = null,
-    var groupId: Int? = null
+    var groupId: Int? = null,
+    var resultAddress : String? = null,
+    var startTime : String? = null,
+    var endTime : String? = null
 ) : DataDto

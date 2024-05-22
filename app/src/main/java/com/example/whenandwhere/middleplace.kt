@@ -17,8 +17,8 @@ class middleplace : AppCompatActivity() {
     private lateinit var binding: ActivityMiddleplaceBinding
     private var alertDialog: AlertDialog? = null // AlertDialog 인스턴스를 저장할 변수 추가
     private var place1Text = "인천광역시 연수구 경원대로 480"
-    private var place2Text = "인천 연수구 경원대로 180"
-    private var place3Text = "서울특별시 도봉구"
+    private var place2Text = "인천광역시 연수구 경원대로 180"
+    private var place3Text = "인천 연수구 학나래로118번길 45"
     private lateinit var select1Button: RadioButton
     private lateinit var select2Button: RadioButton
     private lateinit var select3Button: RadioButton
@@ -80,10 +80,15 @@ class middleplace : AppCompatActivity() {
 
     // 선택된 장소 텍스트와 boolean 값을 다음 액티비티로 전달하는 함수
     private fun moveToNextActivityWithPlace(selectedPlace: String, value: Boolean) {
-        val intent = Intent(this, ai_result::class.java).apply {
+        val startDate = intent.getStringExtra("startDate")
+        val endDate = intent.getStringExtra("endDate")
+
+        val nextIntent = Intent(this, ai_result::class.java).apply {
+            putExtra("startDate", startDate)
+            putExtra("endDate", endDate)
             putExtra("SELECTED_PLACE", selectedPlace) // 선택된 장소 텍스트를 인텐트에 추가
             putExtra("booleanValue", value) // boolean 값을 인텐트에 추가
         }
-        startActivity(intent) // 다음 액티비티로 이동
+        startActivity(nextIntent) // 다음 액티비티로 이동
     }
 }

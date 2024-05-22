@@ -63,8 +63,10 @@ class ai_result : AppCompatActivity() {
         val client = HttpUtil().createClient(jwt)
         val aiRetrofit = HttpUtil().createAIRetrofitWithHeader(client)
         val groupId = HttpUtil().getCurrentGroupIdFromSharedPreference(this)
-        var count = intent.getIntExtra("count", 1)
         // 전달된 값을 받아옵니다
+        var count = intent.getIntExtra("count", 1)
+        val startDate = intent.getStringExtra("startDate")
+        val endDate = intent.getStringExtra("endDate")
         val booleanValue = intent.getBooleanExtra("booleanValue", false)//음주여부
         val selectedPlace = intent.getStringExtra("SELECTED_PLACE") ?: "" //선택된 중간 장소
 
@@ -102,6 +104,9 @@ class ai_result : AppCompatActivity() {
             drinkHash.text = recommendPlace.drinkObj?.keyword
             recommendResult.drinkHash = recommendPlace.drinkObj?.keyword
             recommendResult.groupId = groupId
+            recommendResult.startTime = startDate
+            recommendResult.endTime = endDate
+            recommendResult.resultAddress = selectedPlace
         }
 
         back.setOnClickListener{

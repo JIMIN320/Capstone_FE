@@ -1,5 +1,6 @@
 package com.example.whenandwhere
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -27,8 +28,11 @@ class moimResult : AppCompatActivity() {
     private lateinit var drinkAddress : TextView
     private lateinit var drinkPhone : TextView
     private lateinit var drinkHash : TextView
+    private lateinit var whenText : TextView
+    private lateinit var whereText : TextView
 
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_moim_result)
@@ -46,6 +50,8 @@ class moimResult : AppCompatActivity() {
         drinkAddress = findViewById(R.id.drinkaddress)
         drinkPhone = findViewById(R.id.drinkphone)
         drinkHash = findViewById(R.id.drinkhash)
+        whenText = findViewById(R.id.`when`)
+        whereText = findViewById(R.id.where)
 
         val jwt = HttpUtil().getJWTFromSharedPreference(this) ?: ""
         val client = HttpUtil().createClient(jwt)
@@ -68,6 +74,8 @@ class moimResult : AppCompatActivity() {
             drinkAddress.text = recommendPlace.drinkAddress
             drinkPhone.text = recommendPlace.drinkPhone
             drinkHash.text = recommendPlace.drinkHash
+            whenText.text = "시작: ${recommendPlace.startTime}\n종료: ${recommendPlace.endTime}"
+            whereText.text = recommendPlace.resultAddress
         }
 
         val backbtn = findViewById<ImageView>(R.id.arrowleft)

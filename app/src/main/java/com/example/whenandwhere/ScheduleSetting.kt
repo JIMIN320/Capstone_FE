@@ -31,7 +31,6 @@ class ScheduleSetting : AppCompatActivity() {
     private lateinit var scheduleTitleText: TextView
     private lateinit var scheduleList: MutableList<ScheduleItem>
     private lateinit var selectedSchedule: ScheduleItem // 선택된 스케줄을 저장하는 변수
-    private lateinit var recyclerView: RecyclerView
     private lateinit var startYearPicker: NumberPicker
     private lateinit var startMonthPicker: NumberPicker
     private lateinit var startDayPicker: NumberPicker
@@ -48,10 +47,18 @@ class ScheduleSetting : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_schedule_setting)
 
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+        val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
         val intent = intent
         val userId = intent.getStringExtra("memberId") ?: ""
         val userNick = intent.getStringExtra("memberNickname")
-        Log.d("DATA", "${userId.toString()} $userNick")
+        // Retrofit 객체 생성
+        val jwt = HttpUtil().getJWTFromSharedPreference(this) ?: ""
+        val client = HttpUtil().createClient(jwt)
+        val retrofit = HttpUtil().createRetrofitWithHeader(client)
+
+
+        Log.d("DATA", "$userId $userNick")
         scheduleTitleText = findViewById(R.id.schedule_title)
         scheduleTitleText.text = "$userNick 의 일정"
 
@@ -65,9 +72,6 @@ class ScheduleSetting : AppCompatActivity() {
         endDayPicker = findViewById(R.id.daypicker_end)
         endHourPicker = findViewById(R.id.hourPicker_end)
         endMinPicker = findViewById(R.id.minPicker_end)
-
-        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
 
         startYearPicker.minValue = 2000
         startYearPicker.maxValue = currentYear + 10
@@ -115,18 +119,6 @@ class ScheduleSetting : AppCompatActivity() {
         endMinPicker.minValue = 0
         endMinPicker.maxValue = 59
         endMinPicker.setFormatter { value -> String.format("%02d", value) }
-
-
-        // Retrofit 객체 생성
-        val jwt = HttpUtil().getJWTFromSharedPreference(this) ?: ""
-        val client = HttpUtil().createClient(jwt)
-        val retrofit = HttpUtil().createRetrofitWithHeader(client)
-
-//        // api 실행 및 그룹 리스트 매핑시키기
-//        lifecycleScope.launch {
-//            val scheduleList = getSchedules(retrofit)
-//            Log.d("MemberList", "${scheduleList}")
-//        }
 
         // api 실행 및 그룹 리스트 매핑시키기
         lifecycleScope.launch {
@@ -258,16 +250,6 @@ class ScheduleSetting : AppCompatActivity() {
         alertDialog.show()
     }
 
-
-//    private fun generateScheduleList(): List<ScheduleItem> {
-//        val scheduleList = ArrayList<ScheduleItem>()
-//        for (i in 1..5) {
-//            val scheduleText = "${i}st_schedule"
-//            scheduleList.add(ScheduleItem(scheduleText))
-//        }
-//        return scheduleList
-//    }
-
     private fun selectWeek(widget: MaterialCalendarView, date: CalendarDay) {
         val calendar = Calendar.getInstance()
         calendar.set(date.year, date.month, date.day)
@@ -314,44 +296,6 @@ class ScheduleSetting : AppCompatActivity() {
             return@withContext ArrayList()
         }
     }
-
-//    private suspend fun getSchedules(retrofit: Retrofit): ArrayList<Schedules> {
-//        val userId = intent.getStringExtra("memberId") ?: ""
-//
-//        return withContext(Dispatchers.IO) {
-//
-//            val apiService = retrofit.create(ApiService::class.java)
-//            val call = apiService.getSchedules(userId)
-//
-//            val response = call.execute()
-//            if (response.isSuccessful) {
-//                val responseData = response.body()
-//                // 응답 데이터 로그
-//                responseData?.let {
-//                    Log.d("ApiTest", "유저 스케줄: ${it.data}")
-//                    val resultList = arrayListOf<Schedules>()
-//                    for (schedule in it.data) {
-//                        resultList.add(
-//                            Schedules(
-//                                schedule.id,
-//                                schedule.title,
-//                                schedule.detail,
-//                                schedule.startTime,
-//                                schedule.endTime
-//                            )
-//                        )
-//                    }
-//
-//                    return@withContext resultList
-//                }
-//                // 예: responseData를 TextView에 설정하거나, 다른 작업을 수행할 수 있습니다.
-//            } else {
-//                // 요청 실패 처리
-//                Log.d("ERRR", "실패")
-//            }
-//            return@withContext ArrayList()
-//        }
-//    }
 
     private fun deleteSchedule( retrofit: Retrofit, scheduleId : Int) {
         val apiService = retrofit.create(ApiService::class.java)
