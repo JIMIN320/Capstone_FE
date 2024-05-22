@@ -30,7 +30,7 @@
         android:id="@+id/moim"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="00 모임"
+        android:text="데이트 모임"
         android:fontFamily="@font/pretendard_medium"
         android:textSize="20sp"
         android:textColor="@color/black"
@@ -69,7 +69,7 @@
             android:id="@+id/when"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="20200220"
+            android:text="2024-05-22"
             android:fontFamily="@font/pretendard_regular"
             />
     </LinearLayout>
@@ -95,7 +95,7 @@
             android:id="@+id/where"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="어딘가"
+            android:text="인천광역시 연수구 경원대로 480"
             android:fontFamily="@font/pretendard_regular"
             />
     </LinearLayout>
