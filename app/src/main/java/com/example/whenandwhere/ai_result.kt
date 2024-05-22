@@ -72,6 +72,7 @@ class ai_result : AppCompatActivity() {
         Log.d("ai_result", "Boolean 값: $booleanValue")
         Log.d("ai_result", "선택된 장소: $selectedPlace")
 
+
         val back: ImageView = findViewById(R.id.arrowleft)
         lifecycleScope.launch {
             val recommendPlace = recommendFunc(aiRetrofit, count, selectedPlace, booleanValue)

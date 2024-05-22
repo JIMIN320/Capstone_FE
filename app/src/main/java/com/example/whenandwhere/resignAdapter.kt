@@ -7,7 +7,10 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class resignAdapter (private val itemList: List<resignClass>, private val listener: ButtonClickListener) :
+class resignAdapter(
+    private val itemList: List<resignClass>,
+    private val listener: ButtonClickListener
+) :
     RecyclerView.Adapter<resignAdapter.ViewHolder>() {
 
     interface ButtonClickListener {
