@@ -45,8 +45,8 @@ interface ApiService {
     @GET("api/schedule/get-schedule")
     fun getSchedules(@Query("userId") userId : String) : Call<ScheduleListDto>
 
-    @POST("api/schedule/add")
-    fun addSchedule(@Body scheduleDto: ScheduleDto) : Call<ObjectDto>
+    @POST("api/schedule/add/{email}")
+    fun addSchedule(@Body scheduleDto: ScheduleDto, @Path("email") email : String) : Call<ObjectDto>
 
     // 그룹 지원 API
     @GET("api/apply/get-apply/{group_id}")

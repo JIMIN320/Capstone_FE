@@ -49,7 +49,7 @@ class ScheduleSetting : AppCompatActivity() {
         setContentView(R.layout.activity_schedule_setting)
 
         val intent = intent
-        val userId = intent.getStringExtra("memberId")
+        val userId = intent.getStringExtra("memberId") ?: ""
         val userNick = intent.getStringExtra("memberNickname")
         Log.d("DATA", "${userId.toString()} $userNick")
         scheduleTitleText = findViewById(R.id.schedule_title)
@@ -190,7 +190,7 @@ class ScheduleSetting : AppCompatActivity() {
                 "${endYearPicker.value}-$endMonthFormatted-$endDayFormatted $endHourFormatted:$endMinFormatted:00"
             Log.d("Input Text", "$titleText $detailText $startTimeText $endTimeText")
             val newSchedule = ScheduleDto(0, titleText, detailText, startTimeText, endTimeText)
-            addScheduleFunc(retrofit, newSchedule)
+            addScheduleFunc(retrofit, newSchedule, userId)
         }
 
 //        scheduleList = generateScheduleList().toMutableList()
@@ -208,13 +208,13 @@ class ScheduleSetting : AppCompatActivity() {
 
         // Populating the dialog with schedule data if needed
         val Title = dialogView.findViewById<TextView>(R.id.scheduleTitle)
-        Title.text = "제목 넣기" // 필요한 텍스트로 설정
+        Title.text = scheduleItem.title // 필요한 텍스트로 설정
 
         val Start = dialogView.findViewById<TextView>(R.id.scheduleStart)
-        Start.text = "시간 넣기" // 필요한 텍스트로 설정
+        Start.text = "시작 날짜 : ${scheduleItem.startTime.split(" ")[0]}\n 시작 시간: ${scheduleItem.startTime.split(" ")[1]}" // 필요한 텍스트로 설정
 
         val End = dialogView.findViewById<TextView>(R.id.scheduleEnd)
-        End.text = "시간 넣기" // 필요한 텍스트로 설정
+        End.text = "종료 날짜 : ${scheduleItem.endTime.split(" ")[0]}\n 종료 시간: ${scheduleItem.endTime.split(" ")[1]}" // 필요한 텍스트로 설정 // 필요한 텍스트로 설정
 
         // Set up the confirm and cancel buttons
         dialogView.findViewById<Button>(R.id.deleteSchedule).setOnClickListener {
@@ -375,10 +375,11 @@ class ScheduleSetting : AppCompatActivity() {
     }
 
 
-    private fun addScheduleFunc(retrofit: Retrofit, scheduleDto: ScheduleDto) {
+    private fun addScheduleFunc(retrofit: Retrofit, scheduleDto: ScheduleDto, email: String) {
         // api 요청
+        Log.d("TESTET", email)
         val apiService = retrofit.create(ApiService::class.java)
-        val call = apiService.addSchedule(scheduleDto)
+        val call = apiService.addSchedule(scheduleDto, email)
 
         // Validation
         if (scheduleDto.title.equals("") || scheduleDto.title == null) {
@@ -397,9 +398,10 @@ class ScheduleSetting : AppCompatActivity() {
         call.enqueue(object : Callback<ObjectDto> {
             override fun onResponse(call: Call<ObjectDto>, response: Response<ObjectDto>) {
                 if (response.code() == 201) {
-                    val intent = (this as Activity).intent
-                    this.finish() //현재 액티비티 종료 실시
-                    this.startActivity(intent) //현재 액티비티 재실행 실시
+                    val activity = this@ScheduleSetting
+                    val intent = activity.intent
+                    activity.finish() // 현재 액티비티 종료
+                    activity.startActivity(intent) // 현재 액티비티 재실행
                     Log.d("ApiTest", "스케줄 처리 여부: ${response.code()}")
                     // 예: responseData를 TextView에 설정하거나, 다른 작업을 수행할 수 있습니다.
                 } else {
