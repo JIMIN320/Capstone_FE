@@ -1,6 +1,7 @@
 package com.example.whenandwhere
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -134,10 +135,10 @@ class ScheduleSetting : AppCompatActivity() {
             val recyclerView = findViewById<RecyclerView>(R.id.schedule_recycler_view)
             recyclerView.layoutManager = LinearLayoutManager(this@ScheduleSetting)
             val adapter = ScheduleSettingAdapter(scheduleList) { scheduleItem ->
-                showDeletePopup(scheduleItem)
+                showDeletePopup(retrofit, scheduleItem)
             }
             recyclerView.adapter = adapter
-
+            adapter.notifyDataSetChanged() // 데이터 변경 알림
         }
 
         // SlidingUpPanelLayout에 대한 참조를 가져옵니다.
@@ -199,10 +200,11 @@ class ScheduleSetting : AppCompatActivity() {
         }
     }
 
-    private fun showDeletePopup(scheduleItem: ScheduleItem) {
+    private fun showDeletePopup(retrofit: Retrofit, scheduleItem: ScheduleItem) {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.schedule_popup, null)
         val alertDialogBuilder = AlertDialog.Builder(this).setView(dialogView)
         val alertDialog = alertDialogBuilder.create()
+        selectedSchedule = scheduleItem
 
         // Populating the dialog with schedule data if needed
         val Title = dialogView.findViewById<TextView>(R.id.scheduleTitle)
@@ -217,7 +219,7 @@ class ScheduleSetting : AppCompatActivity() {
         // Set up the confirm and cancel buttons
         dialogView.findViewById<Button>(R.id.deleteSchedule).setOnClickListener {
             // Handle the confirm button click
-            showSecondPopup()
+            showSecondPopup(retrofit)
             alertDialog.dismiss()
         }
 
@@ -228,7 +230,7 @@ class ScheduleSetting : AppCompatActivity() {
         alertDialog.show()
     }
 
-    private fun showSecondPopup() {
+    private fun showSecondPopup(retrofit:Retrofit) {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.schedule_second_popup, null)
         val alertDialogBuilder = AlertDialog.Builder(this).setView(dialogView)
         val alertDialog = alertDialogBuilder.create()
@@ -239,7 +241,12 @@ class ScheduleSetting : AppCompatActivity() {
 
         // 두 번째 팝업창의 버튼을 설정합니다.
         dialogView.findViewById<Button>(R.id.deleteCheck).setOnClickListener {
+
             // 두 번째 팝업창의 확인 버튼 클릭 시의 동작을 정의합니다.
+            deleteSchedule(retrofit, selectedSchedule.id)
+            val intent = (this as Activity).intent
+            this.finish() //현재 액티비티 종료 실시
+            this.startActivity(intent) //현재 액티비티 재실행 실시
 
             alertDialog.dismiss()
         }
@@ -346,6 +353,28 @@ class ScheduleSetting : AppCompatActivity() {
 //        }
 //    }
 
+    private fun deleteSchedule( retrofit: Retrofit, scheduleId : Int) {
+        val apiService = retrofit.create(ApiService::class.java)
+        val call = apiService.deleteSchedule(ScheduleDto(scheduleId, "", "" ,"" , ""))
+
+        call.enqueue(object : Callback<ObjectDto> {
+            override fun onResponse(call: Call<ObjectDto>, response: Response<ObjectDto>) {
+                if (response.code() == 200) {
+                    Log.d("ApiTest", "스케줄 삭제 여부: ${response.code()}")
+                    // 예: responseData를 TextView에 설정하거나, 다른 작업을 수행할 수 있습니다.
+                } else {
+                    // 요청 실패 처리
+                    Log.d("ERRR", "실패")
+                }
+            }
+            override fun onFailure(call: Call<ObjectDto>, t: Throwable) {
+                Log.d("ERRR", "에러 이유 : $t")
+                // 네트워크 오류 처리
+            }
+        })
+    }
+
+
     private fun addScheduleFunc(retrofit: Retrofit, scheduleDto: ScheduleDto) {
         // api 요청
         val apiService = retrofit.create(ApiService::class.java)
@@ -368,6 +397,9 @@ class ScheduleSetting : AppCompatActivity() {
         call.enqueue(object : Callback<ObjectDto> {
             override fun onResponse(call: Call<ObjectDto>, response: Response<ObjectDto>) {
                 if (response.code() == 201) {
+                    val intent = (this as Activity).intent
+                    this.finish() //현재 액티비티 종료 실시
+                    this.startActivity(intent) //현재 액티비티 재실행 실시
                     Log.d("ApiTest", "스케줄 처리 여부: ${response.code()}")
                     // 예: responseData를 TextView에 설정하거나, 다른 작업을 수행할 수 있습니다.
                 } else {
