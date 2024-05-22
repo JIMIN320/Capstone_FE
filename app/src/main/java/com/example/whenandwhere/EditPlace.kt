@@ -18,11 +18,13 @@ class EditPlace : AppCompatActivity() {
         setContentView(R.layout.activity_edit_place)
 
         val memberList = intent.getStringArrayListExtra("memberNicknameList")
-        val memberIdList = intent.getIntegerArrayListExtra("memberIdList")
+        val memberIds = intent.getParcelableArrayListExtra<MemberClass>("memberIds")
 
         val resultButton = findViewById<Button>(R.id.resultbutton)
         resultButton.setOnClickListener {
-            val intent = Intent(this, TimeResultActivity::class.java)
+            val intent = Intent(this, TimeResultActivity::class.java).apply{
+                putParcelableArrayListExtra("memberIds", memberIds)
+            }
             startActivity(intent)
         }
 
