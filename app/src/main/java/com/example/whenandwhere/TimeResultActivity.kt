@@ -1,30 +1,21 @@
 package com.example.whenandwhere
 
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.example.whenandwhere.databinding.ActivityTimeResultBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
 import java.util.*
 
 class TimeResultActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTimeResultBinding
-    private lateinit var pagerAdapter: MyAdapter
-    private var startDate = "2024-05-22 13:30:00"
-    private var endDate = "2024-05-22 15:00:00"
     private val numPage = 2000 // 페이지 수
+    private var scheduleList: List<ScheduleDto> = listOf()
     val currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 2 // 현재 월을 가져옴
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,51 +23,120 @@ class TimeResultActivity : AppCompatActivity() {
         binding = ActivityTimeResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //member id
-        val memberIds = intent.getParcelableArrayListExtra<MemberClass>("memberIds")
+        // Member ID
+        //val memberIds = intent.getParcelableArrayListExtra<MemberClass>("memberIds")
 
-        // ViewPager2 설정
-        binding.viewpager.apply {
-            pagerAdapter = MyAdapter(this@TimeResultActivity, numPage)
-            adapter = pagerAdapter
-            orientation = ViewPager2.ORIENTATION_HORIZONTAL
-            offscreenPageLimit = 3
-            setCurrentItem(1000, false)
+        // Current date information
+        val currentCalendar = Calendar.getInstance()
+        val currentYear = currentCalendar.get(Calendar.YEAR)
+        val currentMonth = currentCalendar.get(Calendar.MONTH)
+        val currentWeek = currentCalendar.get(Calendar.WEEK_OF_MONTH)
 
-            // 페이지 변경 이벤트 처리
-            registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    super.onPageSelected(position)
-                    updateMonthAndWeek(position) // 멤버 함수 호출
-                    /*
-                    getData(memberIds?.toList() ?: emptyList())
-                    /** 받아온 데이터를 updateBoxesColor로 넘겨 */
-                    updateBoxesColor(position) // 멤버 함수 호출
-                    */
+        // Generate week data for the current year
+        val dataList = generateWeekDataForYear(currentYear)
+        val viewPager: ViewPager2 = findViewById(R.id.viewpager)
+        val indicatorText: TextView = findViewById(R.id.indicator_text)
 
-                }
-            })
+
+//         scheduleList 초기화
+        scheduleList = intent.getParcelableArrayListExtra<ScheduleDto>("scheduleList") ?: listOf()
+
+
+
+        val pagerAdapter = MyPagerAdapter(this, dataList, scheduleList)
+        viewPager.adapter = pagerAdapter
+
+
+        // Find the initial position based on the current month and week
+        val initialPosition = dataList.indexOfFirst { data ->
+            val (monthString, weekString) = data.week.split(" ")
+            val month = monthString.substringBefore("월").toInt() // "월" 앞의 문자열을 추출하여 정수로 변환
+            val week = weekString.substringBefore("주차").toInt() // "주차" 앞의 문자열을 추출하여 정수로 변환
+            month == currentMonth + 1 && week == currentWeek
         }
 
-        // Indicator 설정
-        updateMonthAndWeek(1000)
+        viewPager.setCurrentItem(initialPosition, false) // 초기 위치 설정
+
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                indicatorText.text = pagerAdapter.getWeek(position)
+            }
+        })
+
 
         val backbutton = findViewById<ImageView>(R.id.arrowleft)
         backbutton.setOnClickListener {
-            val intent = Intent(this, EditPlace::class.java)
+            // PutExtra 전달 값 때문에 scheduletitle로 다시 이동해야함
+            val intent = Intent(this, ScheduleTitle::class.java)
             startActivity(intent)
         }
 
         val nextbtn = findViewById<Button>(R.id.resultbutton)
         nextbtn.setOnClickListener {
             val intent = Intent(this, middleplace::class.java)
-            intent.putExtra("startDate", startDate)
-            intent.putExtra("endDate", endDate)
             startActivity(intent)
         }
+
     }
 
-    /*
+    private fun generateWeekDataForYear(year: Int): List<MyData> {
+        val calendar = Calendar.getInstance()
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val weekDataList = mutableListOf<MyData>()
+
+
+        for (month in 0 until 12) {
+            calendar.set(year, month, 1)
+
+            // Find the first Monday of the month
+            var firstMonday = calendar.firstDayOfWeek
+            while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
+                calendar.add(Calendar.DATE, 1)
+                firstMonday++
+            }
+
+            var weekOfMonth = 1
+            while (calendar.get(Calendar.MONTH) == month) {
+                val formattedDate = "${year}-${month + 1}-${calendar.get(Calendar.DAY_OF_MONTH)}"
+                val weekData = MyData("${month + 1}월 ${weekOfMonth}주차", "데이터 $formattedDate")
+
+                weekDataList.add(weekData)
+                calendar.add(Calendar.DATE, 7)
+
+                // Increment week number only if the next week is still within the same month
+                if (calendar.get(Calendar.MONTH) == month) {
+                    weekOfMonth++
+                }
+            }
+        }
+
+        return weekDataList
+    }
+
+    //시간 결정 팝업
+    private fun showCheckPopup(startTime: String, orangeCount: Int) {
+        val dialogView =
+            LayoutInflater.from(this).inflate(R.layout.time_result_check_popup, null)
+        val alertDialogBuilder = AlertDialog.Builder(this).setView(dialogView)
+        val alertDialog = alertDialogBuilder.create()
+
+        val TimeTextView = dialogView.findViewById<TextView>(R.id.checktext)
+        TimeTextView.text = "선택된 일정 : ${startTime}부터 ${orangeCount}시간"
+
+        dialogView.findViewById<Button>(R.id.confirm).setOnClickListener {
+            // 선택한 일정 저장
+
+        }
+
+        dialogView.findViewById<Button>(R.id.cancel).setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        alertDialog.show()
+    }
+}
+/*
                 // 멤버 함수로 변경
                 private fun updateBoxesColor(position: Int) {
                     /** 여기서 box를 계산해서 색을 칠해 */
@@ -130,18 +190,6 @@ class TimeResultActivity : AppCompatActivity() {
                         }
                     }
                 }
-    */
-    // 멤버 함수로 변경
-    private fun updateMonthAndWeek(position: Int) {
-        val newPosition = position % numPage // 현재 페이지 인덱스 계산
-        val newMonth = (currentMonth + (newPosition / 4)) % 12 // 현재 월 업데이트
-        val newWeek = (newPosition % 4) + 1 // 현재 주차 업데이트
-
-//        startDate = "2024-${newMonth + 1}-{여기에 현재 주가 시작하는 날짜}"
-//        endDate = "2024-${newMonth + 1}-{여기에 현재 주가 끝나는 날짜}"
-        // 업데이트된 월과 주차를 UI에 반영
-        binding.indicatorText.text = "${newMonth + 1}월 ${newWeek}주차"
-    }
 
     private fun updateBoxesColor(position: Int) {
         val newPosition = position % numPage // 현재 페이지 인덱스 계산
@@ -162,30 +210,4 @@ class TimeResultActivity : AppCompatActivity() {
             }
         }
     }
-
-
-    //시간 결정 팝업
-    private fun showCheckPopup() {
-        val dialogView =
-            LayoutInflater.from(this).inflate(R.layout.time_result_check_popup, null)
-        val alertDialogBuilder = AlertDialog.Builder(this).setView(dialogView)
-        val alertDialog = alertDialogBuilder.create()
-
-        // Populating the dialog with schedule data if needed
-        val TimeTextView = dialogView.findViewById<TextView>(R.id.checktext)
-        TimeTextView.text = "선택한 일정 넣기"
-
-        // Set up the confirm
-        dialogView.findViewById<Button>(R.id.confirm).setOnClickListener {
-            // Handle the confirm button click
-
-        }
-
-        dialogView.findViewById<Button>(R.id.cancel).setOnClickListener {
-            alertDialog.dismiss()
-        }
-
-        alertDialog.show()
-
-    }
-}
+    */
