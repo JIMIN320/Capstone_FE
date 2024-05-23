@@ -15,7 +15,7 @@ class TimeResultActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTimeResultBinding
     private val numPage = 2000 // 페이지 수
-    private var scheduleList: List<ScheduleDto> = listOf()
+    private lateinit var scheduleList: ArrayList<scheduleClass>
     val currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 2 // 현재 월을 가져옴
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,8 +23,7 @@ class TimeResultActivity : AppCompatActivity() {
         binding = ActivityTimeResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Member ID
-        //val memberIds = intent.getParcelableArrayListExtra<MemberClass>("memberIds")
+        val memberIds = intent.getIntegerArrayListExtra("memberIds")
 
         // Current date information
         val currentCalendar = Calendar.getInstance()
@@ -39,10 +38,27 @@ class TimeResultActivity : AppCompatActivity() {
 
 
 //         scheduleList 초기화
-        scheduleList = intent.getParcelableArrayListExtra<ScheduleDto>("scheduleList") ?: listOf()
+        scheduleList = ArrayList<scheduleClass>()
 
+        val schedule1 = scheduleClass(startTime = "2024-05-22T10:00:00", endTime = "2024-05-22T15:00:00")
+        val schedule2 = scheduleClass(startTime = "2024-05-20T18:00:00", endTime = "2024-05-20T22:00:00")
+        val schedule3 = scheduleClass(startTime = "2024-05-23T17:00:00", endTime = "2024-05-23T18:00:00")
 
+        scheduleList.add(schedule1)
+        scheduleList.add(schedule2)
+        scheduleList.add(schedule3)
 
+        /*임시데이터
+        scheduleList = ArrayList<ScheduleClass>()
+            ScheduleDto(
+                id = 1,
+                title = "Meeting",
+                detail = "Discuss project updates",
+                startTime = "2024-05-22T10:00:00",
+                endTime = "2024-05-22T15:00:00"
+            )
+        )
+         */
         val pagerAdapter = MyPagerAdapter(this, dataList, scheduleList)
         viewPager.adapter = pagerAdapter
 

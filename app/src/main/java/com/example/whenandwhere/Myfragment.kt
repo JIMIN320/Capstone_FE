@@ -15,16 +15,29 @@ import java.util.Locale
 
 class MyFragment : Fragment() {
 
-    private lateinit var week: String
-    private lateinit var data: String
-    private var scheduleList: List<ScheduleDto> = listOf()
+    private lateinit var WEEK: String
+    private lateinit var DATA: String
+    private lateinit var SCHEDULES: ArrayList<scheduleClass>
+
+    companion object {
+        fun newInstance(week : String, data: String, scheduleList : ArrayList<scheduleClass>): MyFragment{
+            val args = Bundle()
+            args.putString("WEEK", week)
+            args.putString("DATA", data)
+            args.putSerializable("SCHEDULES", scheduleList)
+            val fragment = MyFragment()
+            fragment.arguments = args
+            return fragment
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            week = it.getString(ARG_WEEK)!!
-            data = it.getString(ARG_DATA)!!
-            scheduleList = it.getParcelableArrayList(ARG_SCHEDULE_LIST) ?: listOf()
+            WEEK = it.getString("WEEK")!!
+            DATA = it.getString("DATA")!!
+            SCHEDULES = it.getSerializable("SCHEDULES") as? ArrayList<scheduleClass> ?: ArrayList()
+
         }
     }
 
@@ -50,7 +63,7 @@ class MyFragment : Fragment() {
             view.findViewById<LinearLayout>(R.id.box_sun)
         )
 
-        for (schedule in scheduleList) {
+        for (schedule in SCHEDULES) {
             val startHour = schedule.startTime.substring(11, 13).toInt()
             val endHour = schedule.endTime.substring(11, 13).toInt()
             val dayIndex = getDayIndex(schedule.startTime.substring(0, 10)) // Assuming date format "yyyy-MM-dd"
@@ -108,14 +121,14 @@ class MyFragment : Fragment() {
         return view.background.constantState == resources.getDrawable(R.drawable.box_selected_background).constantState
     }
 
-    private fun showCheckPopup(schedule: ScheduleDto, orangeCount: Int) {
+    private fun showCheckPopup(schedule: scheduleClass, orangeCount: Int) {
         val activity = activity ?: return
         val dialogView = LayoutInflater.from(activity).inflate(R.layout.time_result_check_popup, null)
         val alertDialogBuilder = AlertDialog.Builder(activity).setView(dialogView)
         val alertDialog = alertDialogBuilder.create()
 
         val TimeTextView = dialogView.findViewById<TextView>(R.id.checktext)
-        TimeTextView.text = "선택된 일정 : ${schedule.title}\n연결된 주황색 박스 개수 : $orangeCount"
+        TimeTextView.text = "선택된 시작 일정 : ${schedule.startTime} 종료 일정:  ${schedule.endTime}\n연결된 주황색 박스 개수 : $orangeCount"
 
         dialogView.findViewById<Button>(R.id.confirm).setOnClickListener {
             alertDialog.dismiss()
@@ -142,21 +155,5 @@ class MyFragment : Fragment() {
             Calendar.SUNDAY -> 6
             else -> -1
         }
-    }
-
-    companion object {
-        private const val ARG_WEEK = "week"
-        private const val ARG_DATA = "data"
-        private const val ARG_SCHEDULE_LIST = "scheduleList"
-
-        @JvmStatic
-        fun newInstance(week: String, data: String, scheduleList: List<ScheduleDto>) =
-            MyFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_WEEK, week)
-                    putString(ARG_DATA, data)
-                    putParcelableArrayList(ARG_SCHEDULE_LIST, ArrayList(scheduleList))
-                }
-            }
     }
 }

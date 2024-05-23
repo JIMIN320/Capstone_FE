@@ -7,7 +7,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-val URL = "http://3.36.131.153:8080"
+val URL = "http://3.36.131.153"
 
 val AIURL = "http://34.64.157.20:5000"
 
