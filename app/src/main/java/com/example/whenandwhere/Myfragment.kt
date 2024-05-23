@@ -20,7 +20,11 @@ class MyFragment : Fragment() {
     private lateinit var SCHEDULES: ArrayList<scheduleClass>
 
     companion object {
-        fun newInstance(week : String, data: String, scheduleList : ArrayList<scheduleClass>): MyFragment{
+        fun newInstance(
+            week: String,
+            data: String,
+            scheduleList: ArrayList<scheduleClass>
+        ): MyFragment {
             val args = Bundle()
             args.putString("WEEK", week)
             args.putString("DATA", data)
@@ -37,7 +41,6 @@ class MyFragment : Fragment() {
             WEEK = it.getString("WEEK")!!
             DATA = it.getString("DATA")!!
             SCHEDULES = it.getSerializable("SCHEDULES") as? ArrayList<scheduleClass> ?: ArrayList()
-
         }
     }
 
@@ -48,7 +51,6 @@ class MyFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_new, container, false)
 
         highlightSchedule(view)
-
         return view
     }
 
@@ -73,61 +75,45 @@ class MyFragment : Fragment() {
                 for (hour in startHour..endHour) {
                     if (hour - 10 in 0 until dayLayout.childCount) {
                         val hourView = dayLayout.getChildAt(hour - 10)
-                        hourView.isClickable = true // 클릭 가능 상태로 설정
-                        if (isOrangeBackground(hourView)) {
-                            hourView.setOnClickListener {
-                                val orangeCount = countConnectedOrangeViews(hourView)
-                                showCheckPopup(schedule, orangeCount)
-                            }
-                        }
                         hourView.setBackgroundResource(R.drawable.box_background)
+                        hourView.isClickable = false
+                    }
+                }
+            }
+        }
+
+        for (dayIndex in dayLayouts.indices) {
+            val dayLayout = dayLayouts[dayIndex]
+            for (i in 0 until dayLayout.childCount) {
+                val hourView = dayLayout.getChildAt(i)
+                if (isOrangeBackground(hourView)) {
+                    hourView.isClickable = true
+                    hourView.setOnClickListener {
+                        val tag = hourView.tag as? String
+                        val hour = tag?.substringAfter("hour_")?.toIntOrNull()
+                        if (hour != null) {
+                            showCheckPopup(dayIndex, hour)
+                        }
                     }
                 }
             }
         }
     }
 
-    private fun countConnectedOrangeViews(clickedView: View): Int {
-        val parentLayout = clickedView.parent as LinearLayout
-        val clickedIndex = parentLayout.indexOfChild(clickedView)
-
-        // 위쪽 주황색 뷰 개수 계산
-        var orangeCountUp = 0
-        for (i in clickedIndex - 1 downTo 0) {
-            val view = parentLayout.getChildAt(i)
-            if (isOrangeBackground(view)) {
-                orangeCountUp++
-            } else {
-                break
-            }
-        }
-        // 아래쪽 주황색 뷰 개수 계산
-        var orangeCountDown = 0
-        for (i in clickedIndex + 1 until parentLayout.childCount) {
-            val view = parentLayout.getChildAt(i)
-            if (isOrangeBackground(view)) {
-                orangeCountDown++
-            } else {
-                break
-            }
-        }
-
-        // 총 연결된 주황색 뷰 개수 반환
-        return orangeCountUp + orangeCountDown + 1 // 클릭된 뷰 포함
-    }
-
     private fun isOrangeBackground(view: View): Boolean {
         return view.background.constantState == resources.getDrawable(R.drawable.box_selected_background).constantState
     }
 
-    private fun showCheckPopup(schedule: scheduleClass, orangeCount: Int) {
+    private fun showCheckPopup(dayIndex: Int, hour: Int) {
         val activity = activity ?: return
-        val dialogView = LayoutInflater.from(activity).inflate(R.layout.time_result_check_popup, null)
+        val dialogView =
+            LayoutInflater.from(activity).inflate(R.layout.time_result_check_popup, null)
         val alertDialogBuilder = AlertDialog.Builder(activity).setView(dialogView)
         val alertDialog = alertDialogBuilder.create()
 
-        val TimeTextView = dialogView.findViewById<TextView>(R.id.checktext)
-        TimeTextView.text = "모임 시간 : ${schedule.startTime}"
+        val date = getDateForDayIndex(dayIndex) // 요일 인덱스에 대한 날짜를 구하는 함수 호출
+        val timeTextView = dialogView.findViewById<TextView>(R.id.checktext)
+        timeTextView.text = "선택된 일정: ${date} ${hour}:00"
 
         dialogView.findViewById<Button>(R.id.confirm).setOnClickListener {
             alertDialog.dismiss()
@@ -138,6 +124,15 @@ class MyFragment : Fragment() {
         }
 
         alertDialog.show()
+    }
+
+    private fun getDateForDayIndex(dayIndex: Int): String {
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+        calendar.add(Calendar.DAY_OF_WEEK, dayIndex)
+
+        val sdf = SimpleDateFormat("yyyy년 MM월 dd일", Locale.getDefault())
+        return sdf.format(calendar.time)
     }
 
     private fun getDayIndex(dateString: String): Int {

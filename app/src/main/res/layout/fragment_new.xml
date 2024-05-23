@@ -33,21 +33,25 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="수" />
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="목" />
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="금" />
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="토" />
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -163,6 +167,9 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="25dp"
             android:layout_weight="1"
             android:clickable="true"
             android:orientation="horizontal">
@@ -171,8 +178,8 @@
                 android:id="@+id/box_mon"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:clickable="true"
                 android:layout_weight="1"
+                android:clickable="true"
                 android:orientation="vertical">
 
                 <View
@@ -180,91 +187,97 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_10" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_11"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_12"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_13"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_14"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_15"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_16"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_17"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_18"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_19"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_20"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_21"/>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
             </LinearLayout>
 
             <LinearLayout
@@ -280,91 +293,97 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_10" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_11"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_12"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_13"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_14"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_15"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_16"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_17"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_18"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_19"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_20"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_21"/>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
             </LinearLayout>
 
             <LinearLayout
@@ -380,91 +399,97 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_10" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_11"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_12"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_13"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_14"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_15"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_16"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_17"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_18"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_19"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_20"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_21"/>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
             </LinearLayout>
 
             <LinearLayout
@@ -480,91 +505,97 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_10" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_11"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_12"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_13"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_14"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_15"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_16"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_17"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_18"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_19"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_20"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_21"/>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
             </LinearLayout>
 
             <LinearLayout
@@ -580,91 +611,97 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_10" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_11"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_12"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_13"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_14"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_15"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_16"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_17"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_18"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_19"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_20"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_21"/>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
             </LinearLayout>
 
             <LinearLayout
@@ -680,91 +717,97 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_10" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_11"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_12"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_13"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_14"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_15"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_16"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_17"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_18"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_19"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_20"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:tag="hour_21"/>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/box_selected_background"
-                    android:clickable="true" />
             </LinearLayout>
 
             <LinearLayout
@@ -779,92 +822,98 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:background="@drawable/box_selected_background"
                     android:clickable="true"
-                    android:background="@drawable/box_selected_background" />
+                    android:tag="hour_10" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:background="@drawable/box_selected_background"
                     android:clickable="true"
-                    android:background="@drawable/box_selected_background" />
+                    android:tag="hour_11"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:background="@drawable/box_selected_background"
                     android:clickable="true"
-                    android:background="@drawable/box_selected_background" />
+                    android:tag="hour_12"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:background="@drawable/box_selected_background"
                     android:clickable="true"
-                    android:background="@drawable/box_selected_background" />
+                    android:tag="hour_13"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:background="@drawable/box_selected_background"
                     android:clickable="true"
-                    android:background="@drawable/box_selected_background" />
+                    android:tag="hour_14"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:background="@drawable/box_selected_background"
                     android:clickable="true"
-                    android:background="@drawable/box_selected_background" />
+                    android:tag="hour_15"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:background="@drawable/box_selected_background"
                     android:clickable="true"
-                    android:background="@drawable/box_selected_background" />
+                    android:tag="hour_16"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:background="@drawable/box_selected_background"
                     android:clickable="true"
-                    android:background="@drawable/box_selected_background" />
+                    android:tag="hour_17"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:background="@drawable/box_selected_background"
                     android:clickable="true"
-                    android:background="@drawable/box_selected_background" />
+                    android:tag="hour_18"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:background="@drawable/box_selected_background"
                     android:clickable="true"
-                    android:background="@drawable/box_selected_background" />
+                    android:tag="hour_19"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:background="@drawable/box_selected_background"
                     android:clickable="true"
-                    android:background="@drawable/box_selected_background" />
+                    android:tag="hour_20"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:background="@drawable/box_selected_background"
                     android:clickable="true"
-                    android:background="@drawable/box_selected_background" />
+                    android:tag="hour_21"/>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:background="@drawable/box_selected_background" />
             </LinearLayout>
 
         </LinearLayout>
