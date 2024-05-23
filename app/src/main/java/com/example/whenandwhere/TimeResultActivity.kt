@@ -40,9 +40,12 @@ class TimeResultActivity : AppCompatActivity() {
 //         scheduleList 초기화
         scheduleList = ArrayList<scheduleClass>()
 
-        val schedule1 = scheduleClass(startTime = "2024-05-22T10:00:00", endTime = "2024-05-22T15:00:00")
-        val schedule2 = scheduleClass(startTime = "2024-05-20T18:00:00", endTime = "2024-05-20T22:00:00")
-        val schedule3 = scheduleClass(startTime = "2024-05-23T17:00:00", endTime = "2024-05-23T18:00:00")
+        val schedule1 =
+            scheduleClass(startTime = "2024-05-22T10:00:00", endTime = "2024-05-22T15:00:00")
+        val schedule2 =
+            scheduleClass(startTime = "2024-05-20T18:00:00", endTime = "2024-05-20T22:00:00")
+        val schedule3 =
+            scheduleClass(startTime = "2024-05-23T17:00:00", endTime = "2024-05-23T18:00:00")
 
         scheduleList.add(schedule1)
         scheduleList.add(schedule2)
@@ -129,7 +132,8 @@ class TimeResultActivity : AppCompatActivity() {
 
         return weekDataList
     }
-
+}
+/*
     //시간 결정 팝업
     private fun showCheckPopup(startTime: String, orangeCount: Int) {
         val dialogView =
@@ -152,7 +156,7 @@ class TimeResultActivity : AppCompatActivity() {
         alertDialog.show()
     }
 }
-/*
+
                 // 멤버 함수로 변경
                 private fun updateBoxesColor(position: Int) {
                     /** 여기서 box를 계산해서 색을 칠해 */
