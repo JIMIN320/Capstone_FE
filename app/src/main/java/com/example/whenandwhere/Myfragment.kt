@@ -127,7 +127,7 @@ class MyFragment : Fragment() {
         val alertDialog = alertDialogBuilder.create()
 
         val TimeTextView = dialogView.findViewById<TextView>(R.id.checktext)
-        TimeTextView.text = "선택된 시작 일정 : ${schedule.startTime} 종료 일정:  ${schedule.endTime}\n연결된 주황색 박스 개수 : $orangeCount"
+        TimeTextView.text = "모임 시간 : ${schedule.startTime}"
 
         dialogView.findViewById<Button>(R.id.confirm).setOnClickListener {
             alertDialog.dismiss()
