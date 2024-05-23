@@ -4,8 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -29,9 +31,6 @@ class ScheduleSetting : AppCompatActivity() {
     private lateinit var scheduleList: MutableList<ScheduleItem>
     private lateinit var selectedSchedule: ScheduleItem // 선택된 스케줄을 저장하는 변수
     private lateinit var recyclerView: RecyclerView
-    private lateinit var deletePopup: ConstraintLayout
-    private lateinit var newSlidingPanel: SlidingUpPanelLayout
-
     private lateinit var startYearPicker: NumberPicker
     private lateinit var startMonthPicker: NumberPicker
     private lateinit var startDayPicker: NumberPicker
@@ -76,15 +75,19 @@ class ScheduleSetting : AppCompatActivity() {
         startMonthPicker.minValue = 1
         startMonthPicker.maxValue = 12
         startMonthPicker.value = currentMonth
+        startMonthPicker.setFormatter { String.format("%02d", it) }
 
         startDayPicker.minValue = 1
         startDayPicker.maxValue = 31
+        startDayPicker.setFormatter { String.format("%02d", it) }
 
         startHourPicker.minValue = 0
         startHourPicker.maxValue = 23
+        startMonthPicker.setFormatter { String.format("%02d", it) }
 
         startMinPicker.minValue = 0
         startMinPicker.maxValue = 59
+        startMinPicker.setFormatter { String.format("%02d", it) }
 
         endYearPicker.minValue = 2000
         endYearPicker.maxValue = currentYear + 10
@@ -92,15 +95,19 @@ class ScheduleSetting : AppCompatActivity() {
 
         endMonthPicker.minValue = 1
         endMonthPicker.maxValue = 12
+        endMonthPicker.setFormatter { String.format("%02d", it) }
 
         endDayPicker.minValue = 1
         endDayPicker.maxValue = 31
+        endDayPicker.setFormatter { String.format("%02d", it) }
 
         endHourPicker.minValue = 0
         endHourPicker.maxValue = 23
+        endHourPicker.setFormatter { String.format("%02d", it) }
 
         endMinPicker.minValue = 0
         endMinPicker.maxValue = 59
+        endMinPicker.setFormatter { String.format("%02d", it) }
 
         // Retrofit 객체 생성
         val jwt = HttpUtil().getJWTFromSharedPreference(this) ?: ""
@@ -144,8 +151,10 @@ class ScheduleSetting : AppCompatActivity() {
         addScheduleButtonInSlide.setOnClickListener {
             val titleText = titleInput.text.toString()
             val detailText = detailInput.text.toString()
-            val startTimeText = "${startYearPicker.value}-${startMonthPicker.value}-${startHourPicker.value}:00"
-            val endTimeText = "${endYearPicker.value}-${endMonthPicker.value}-${endHourPicker.value}:00"
+            val startTimeText =
+                "${startYearPicker.value}-${startMonthPicker.value}-${startHourPicker.value}:00"
+            val endTimeText =
+                "${endYearPicker.value}-${endMonthPicker.value}-${endHourPicker.value}:00"
 
             Log.d("Input Text", "$titleText $detailText $startTimeText $endTimeText")
             val newSchedule = ScheduleDto(0, titleText, detailText, startTimeText, endTimeText)
@@ -161,87 +170,66 @@ class ScheduleSetting : AppCompatActivity() {
         addTextView.setOnClickListener {
             val titleText = titleInput.text.toString()
             val detailText = detailInput.text.toString()
-            val startTimeText = "${startYearPicker.value}-${startMonthPicker.value}-${startHourPicker.value}:00"
-            val endTimeText = "${endYearPicker.value}-${endMonthPicker.value}-${endHourPicker.value}:00"
+            val startTimeText =
+                "${startYearPicker.value}-${startMonthPicker.value}-${startHourPicker.value}:00"
+            val endTimeText =
+                "${endYearPicker.value}-${endMonthPicker.value}-${endHourPicker.value}:00"
 
             Log.d("Input Text", "$titleText $detailText $startTimeText $endTimeText")
             val newSchedule = ScheduleDto(0, titleText, detailText, startTimeText, endTimeText)
             addScheduleFunc(retrofit, newSchedule)
         }
 
-        scheduleList = generateScheduleList().toMutableList()
-
-        scheduleTitleText = findViewById(R.id.schedule_title)
-        recyclerView = findViewById(R.id.schedule_recycler_view)
-
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        val adapter = ScheduleSettingAdapter(scheduleList) { scheduleItem ->
-            showNewSlidingPanel(scheduleItem)
-        }
-        recyclerView.adapter = adapter
-
-
-
-        val deleteScheduleButton = findViewById<Button>(R.id.delete_schedule_button)
-        deleteScheduleButton.setOnClickListener {
-            // 선택된 스케줄을 삭제 팝업에 설정합니다.
-            showDeletePopup(selectedSchedule)
-        }
-
-        deletePopup = findViewById(R.id.delete_schedule_popup)
-        val deleteConfirmButton = findViewById<Button>(R.id.delete_schedule_confirm)
-        val deleteCancelButton = findViewById<Button>(R.id.delete_schedule_cancel)
-
-        deleteConfirmButton.setOnClickListener {
-            deleteSchedule(selectedSchedule)
-            deletePopup.visibility = View.GONE
-        }
-
-        deleteCancelButton.setOnClickListener {
-            deletePopup.visibility = View.GONE
-        }
 
         materialCalendarView.setOnDateChangedListener { widget, date, selected ->
             selectWeek(widget, date)
         }
     }
 
-    private fun showNewSlidingPanel(scheduleItem: ScheduleItem) {
-        selectedSchedule = scheduleItem
-        newSlidingPanel.panelState = SlidingUpPanelLayout.PanelState.ANCHORED
-    }
-
-
     private fun showDeletePopup(scheduleItem: ScheduleItem) {
-        selectedSchedule = scheduleItem
-        deletePopup.visibility = View.VISIBLE // 삭제 팝업을 보이도록 설정
-        val deleteMessageText = deletePopup.findViewById<TextView>(R.id.delete_message_text)
-        deleteMessageText.text = "${scheduleItem.scheduleText} 일정을 삭제하시겠습니까?"
-    }
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.schedule_popup, null)
+        val alertDialogBuilder = AlertDialog.Builder(this).setView(dialogView)
+        val alertDialog = alertDialogBuilder.create()
 
-    private fun deleteSchedule(scheduleItem: ScheduleItem) {
-        // 스케줄 목록에서 삭제
-        scheduleList.remove(scheduleItem)
-        recyclerView.adapter?.notifyDataSetChanged()
-    }
+        // Populating the dialog with schedule data if needed
+        val TimeTextView = dialogView.findViewById<TextView>(R.id.timetext)
+        TimeTextView.text = "시간 넣기" // 필요한 텍스트로 설정
 
-    private fun generateScheduleList(): List<ScheduleItem> {
-        val scheduleList = ArrayList<ScheduleItem>()
-        for (i in 1..5) {
-            val scheduleText = "${i}st_schedule"
-            scheduleList.add(ScheduleItem(scheduleText))
+        // Set up the confirm and cancel buttons
+        dialogView.findViewById<Button>(R.id.deleteSchedule).setOnClickListener {
+            // Handle the confirm button click
+            showSecondPopup()
+            alertDialog.dismiss()
         }
-        return scheduleList
-    }
-}
 
-    private fun generateScheduleList(): List<ScheduleItem> {
-        val scheduleList = ArrayList<ScheduleItem>()
-        for (i in 1..5) {
-            val scheduleText = "${i}st_schedule"
-            scheduleList.add(ScheduleItem(scheduleText))
+        dialogView.findViewById<Button>(R.id.cancel).setOnClickListener {
+            alertDialog.dismiss()
         }
-        return scheduleList
+
+        alertDialog.show()
+    }
+
+    private fun showSecondPopup() {
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.schedule_second_popup, null)
+        val alertDialogBuilder = AlertDialog.Builder(this).setView(dialogView)
+        val alertDialog = alertDialogBuilder.create()
+
+        // Populating the dialog with schedule data if needed
+        val titleTextView = dialogView.findViewById<TextView>(R.id.titletext)
+        titleTextView.text = "정말 일정을 삭제하시겠습니까?" // 필요한 텍스트로 설정
+
+        // 두 번째 팝업창의 버튼을 설정합니다.
+        dialogView.findViewById<Button>(R.id.deleteCheck).setOnClickListener {
+            // 두 번째 팝업창의 확인 버튼 클릭 시의 동작을 정의합니다.
+
+            alertDialog.dismiss()
+        }
+
+        dialogView.findViewById<Button>(R.id.cancelCheck).setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        alertDialog.show()
     }
 
     private fun selectWeek(widget: MaterialCalendarView, date: CalendarDay) {
@@ -262,7 +250,8 @@ class ScheduleSetting : AppCompatActivity() {
         }
     }
 
-    private suspend fun getSchedules(retrofit: Retrofit) : ArrayList<Schedules> {
+    private suspend fun getSchedules(retrofit: Retrofit): ArrayList<Schedules> {
+        val userId = intent.getStringExtra("memberId") ?: ""
         return withContext(Dispatchers.IO) {
 
             val apiService = retrofit.create(ApiService::class.java)
@@ -275,8 +264,16 @@ class ScheduleSetting : AppCompatActivity() {
                 responseData?.let {
                     Log.d("ApiTest", "유저 스케줄: ${it.data}")
                     val resultList = arrayListOf<Schedules>()
-                    for(schedule in it.data){
-                        resultList.add(Schedules(schedule.id, schedule.title, schedule.detail, schedule.startTime, schedule.endTime))
+                    for (schedule in it.data) {
+                        resultList.add(
+                            Schedules(
+                                schedule.id,
+                                schedule.title,
+                                schedule.detail,
+                                schedule.startTime,
+                                schedule.endTime
+                            )
+                        )
                     }
 
                     return@withContext resultList
@@ -290,25 +287,22 @@ class ScheduleSetting : AppCompatActivity() {
         }
     }
 
-    private fun addScheduleFunc(retrofit: Retrofit, scheduleDto : ScheduleDto){
+    private fun addScheduleFunc(retrofit: Retrofit, scheduleDto: ScheduleDto) {
         // api 요청
         val apiService = retrofit.create(ApiService::class.java)
         val call = apiService.addSchedule(scheduleDto)
 
         // Validation
-        if(scheduleDto.title.equals("") || scheduleDto.title == null){
+        if (scheduleDto.title.equals("") || scheduleDto.title == null) {
             Log.d("Validation", "title NULL")
             return
-        }
-        else if(scheduleDto.detail.equals("") || scheduleDto.detail == null){
+        } else if (scheduleDto.detail.equals("") || scheduleDto.detail == null) {
             Log.d("Validation", "detail NULL")
             return
-        }
-        else if(scheduleDto.startTime.equals("") || scheduleDto.startTime == null){
+        } else if (scheduleDto.startTime.equals("") || scheduleDto.startTime == null) {
             Log.d("Validation", "startTime NULL")
             return
-        }
-        else if(scheduleDto.endTime.equals("") || scheduleDto.endTime == null){
+        } else if (scheduleDto.endTime.equals("") || scheduleDto.endTime == null) {
             Log.d("Validation", "endTime NULL")
             return
         }
@@ -322,6 +316,7 @@ class ScheduleSetting : AppCompatActivity() {
                     Log.d("ERRR", "실패")
                 }
             }
+
             override fun onFailure(call: Call<ObjectDto>, t: Throwable) {
                 Log.d("ERRR", "에러 이유 : $t")
                 // 네트워크 오류 처리
@@ -329,3 +324,5 @@ class ScheduleSetting : AppCompatActivity() {
         })
     }
 }
+
+
