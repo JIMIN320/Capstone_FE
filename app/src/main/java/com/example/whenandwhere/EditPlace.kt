@@ -18,21 +18,16 @@ class EditPlace : AppCompatActivity() {
         setContentView(R.layout.activity_edit_place)
 
         val memberList = intent.getStringArrayListExtra("memberNicknameList")
-        val memberIds = intent.getParcelableArrayListExtra<MemberClass>("memberIds")
+        val memberIds = intent.getIntegerArrayListExtra("memberIds")
 
         val resultButton = findViewById<Button>(R.id.resultbutton)
         resultButton.setOnClickListener {
             val intent = Intent(this, TimeResultActivity::class.java).apply{
-                putParcelableArrayListExtra("memberIds", memberIds)
+                putIntegerArrayListExtra("memberIds", memberIds)
             }
             startActivity(intent)
         }
 
-        val arrowLeft = findViewById<ImageView>(R.id.arrowleft)
-        arrowLeft.setOnClickListener {
-            val intent = Intent(this, ScheduleTitle::class.java)
-            startActivity(intent)
-        }
 
         // api 실행 및 그룹 리스트 매핑시키기
         lifecycleScope.launch {
