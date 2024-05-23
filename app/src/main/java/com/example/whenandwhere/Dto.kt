@@ -81,6 +81,7 @@ data class ScheduleDto(
     val detail : String,
     val startTime : String,
     val endTime : String
+<<<<<<< HEAD
 ): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
@@ -112,6 +113,10 @@ data class ScheduleDto(
         }
     }
 }
+=======
+): DataDto
+
+>>>>>>> 525080dfae65d2f4bf313915d6e527729957d2eb
 data class ApplyDto(
     val id : Int,
     val applyGroupId : Int?,
@@ -149,8 +154,12 @@ data class RecommendResult(
     var drinkAddress: String? = null,
     var drinkPhone: String? = null,
     var drinkHash: String? = null,
+<<<<<<< HEAD
     var groupId: Int? = null,
     var resultAddress : String? = null,
     var startTime : String? = null,
     var endTime : String? = null
+=======
+    var groupId: Int? = null
+>>>>>>> 525080dfae65d2f4bf313915d6e527729957d2eb
 ) : DataDto

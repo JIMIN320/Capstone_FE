@@ -76,7 +76,8 @@ class TimeResultActivity : AppCompatActivity() {
 
         val backbutton = findViewById<ImageView>(R.id.arrowleft)
         backbutton.setOnClickListener {
-            val intent = Intent(this, EditPlace::class.java)
+            // PutExtra 전달 값 때문에 scheduletitle로 다시 이동해야함
+            val intent = Intent(this, ScheduleTitle::class.java)
             startActivity(intent)
         }
 

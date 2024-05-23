@@ -1,5 +1,6 @@
 package com.example.whenandwhere
 
+<<<<<<< HEAD
 import android.os.Parcel
 import android.os.Parcelable
 
@@ -34,3 +35,6 @@ data class MemberClass(
         }
     }
 }
+=======
+data class MemberClass(val id : Int, val userId: String, val nickname: String )
+>>>>>>> 525080dfae65d2f4bf313915d6e527729957d2eb
