@@ -103,7 +103,6 @@ class MyFragment : Fragment() {
         return orangeCountUp + orangeCountDown + 1 // 클릭된 뷰 포함
     }
 
-
     private fun isOrangeBackground(view: View): Boolean {
         return view.background.constantState == resources.getDrawable(R.drawable.box_selected_background).constantState
     }

@@ -41,8 +41,6 @@ class TimeResultActivity : AppCompatActivity() {
 //         scheduleList 초기화
         scheduleList = intent.getParcelableArrayListExtra<ScheduleDto>("scheduleList") ?: listOf()
 
-
-
         val pagerAdapter = MyPagerAdapter(this, dataList, scheduleList)
         viewPager.adapter = pagerAdapter
 
