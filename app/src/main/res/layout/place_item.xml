@@ -29,7 +29,13 @@
         android:onClick="onInputButtonClick"
         android:paddingStart="10dp"
         android:hint="출발지를 입력하세요"
-        android:textColor="#919191" />
+        android:textColor="#919191"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:inputType="text"
+        />
+
 
     <ImageButton
         android:id="@+id/imageView_trans1"
