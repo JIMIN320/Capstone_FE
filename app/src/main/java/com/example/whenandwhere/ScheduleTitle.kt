@@ -57,7 +57,7 @@ class ScheduleTitle : AppCompatActivity() {
             }
             val intent = Intent(this, EditPlace::class.java)
             intent.putStringArrayListExtra("memberNicknameList", memberNicknameList)
-            intent.putIntegerArrayListExtra("memberIdList", memberIdList)
+            intent.putIntegerArrayListExtra("MEMBER_IDS", memberIdList)
             startActivity(intent)
         }
     }

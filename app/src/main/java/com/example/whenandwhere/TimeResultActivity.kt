@@ -2,87 +2,83 @@ package com.example.whenandwhere
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.example.whenandwhere.databinding.ActivityTimeResultBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.Retrofit
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.properties.Delegates
 
 class TimeResultActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTimeResultBinding
-    private val numPage = 2000 // 페이지 수
     private lateinit var scheduleList: ArrayList<scheduleClass>
-    val currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 2 // 현재 월을 가져옴
-
+    private lateinit var pagerAdapter: MyPagerAdapter
+    private var selectedPosition by Delegates.notNull<Int>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTimeResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val memberIds = intent.getIntegerArrayListExtra("memberIds")
+        val memberIds = intent.getIntegerArrayListExtra("MEMBER_IDS") ?: ArrayList<Int>()
+        val placeList = intent.getStringArrayListExtra("PLACE_LIST")
+        selectedPosition = 22
 
         // Current date information
         val currentCalendar = Calendar.getInstance()
         val currentYear = currentCalendar.get(Calendar.YEAR)
         val currentMonth = currentCalendar.get(Calendar.MONTH)
-        val currentWeek = currentCalendar.get(Calendar.WEEK_OF_MONTH)
+        var currentWeek = currentCalendar.get(Calendar.WEEK_OF_MONTH)
 
         // Generate week data for the current year
         val dataList = generateWeekDataForYear(currentYear)
         val viewPager: ViewPager2 = findViewById(R.id.viewpager)
         val indicatorText: TextView = findViewById(R.id.indicator_text)
-
+        // http 세팅
+        val jwt = HttpUtil().getJWTFromSharedPreference(this) ?: ""
+        val client = HttpUtil().createClient(jwt)
+        val retrofit = HttpUtil().createRetrofitWithHeader(client)
 
 //         scheduleList 초기화
-        scheduleList = ArrayList<scheduleClass>()
+        scheduleList = ArrayList()
 
-        val schedule1 =
-            scheduleClass(startTime = "2024-05-22T10:00:00", endTime = "2024-05-22T15:00:00")
-        val schedule2 =
-            scheduleClass(startTime = "2024-05-20T18:00:00", endTime = "2024-05-20T22:00:00")
-        val schedule3 =
-            scheduleClass(startTime = "2024-05-23T17:00:00", endTime = "2024-05-23T18:00:00")
-
-        scheduleList.add(schedule1)
-        scheduleList.add(schedule2)
-        scheduleList.add(schedule3)
-
-        /*임시데이터
-        scheduleList = ArrayList<ScheduleClass>()
-            ScheduleDto(
-                id = 1,
-                title = "Meeting",
-                detail = "Discuss project updates",
-                startTime = "2024-05-22T10:00:00",
-                endTime = "2024-05-22T15:00:00"
-            )
-        )
-         */
-        val pagerAdapter = MyPagerAdapter(this, dataList, scheduleList)
-        viewPager.adapter = pagerAdapter
-
-
-        // Find the initial position based on the current month and week
-        val initialPosition = dataList.indexOfFirst { data ->
-            val (monthString, weekString) = data.week.split(" ")
-            val month = monthString.substringBefore("월").toInt() // "월" 앞의 문자열을 추출하여 정수로 변환
-            val week = weekString.substringBefore("주차").toInt() // "주차" 앞의 문자열을 추출하여 정수로 변환
-            month == currentMonth + 1 && week == currentWeek
-        }
-
-        viewPager.setCurrentItem(initialPosition, false) // 초기 위치 설정
-
-        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                indicatorText.text = pagerAdapter.getWeek(position)
+        lifecycleScope.launch {
+            val requestScheduleList = getScheduleList(retrofit, memberIds)
+            for(requestSchedule in requestScheduleList){
+                Log.d("CALC_SCHEDULE","${requestSchedule.startTime} ${requestSchedule.endTime}")
+                scheduleList.add(scheduleClass(requestSchedule.startTime, requestSchedule.endTime))
             }
-        })
+            pagerAdapter = MyPagerAdapter(this@TimeResultActivity, dataList, scheduleList)
+            viewPager.adapter = pagerAdapter
 
+            // Find the initial position based on the current month and week
+            val initialPosition = dataList.indexOfFirst { data ->
+                val (monthString, weekString) = data.week.split(" ")
+                val month = monthString.substringBefore("월").toInt() // "월" 앞의 문자열을 추출하여 정수로 변환
+                val week = weekString.substringBefore("주차").toInt() // "주차" 앞의 문자열을 추출하여 정수로 변환
+                month == currentMonth + 1 && week == 4
+            }
+
+            viewPager.setCurrentItem(initialPosition, false) // 초기 위치 설정
+
+            viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    indicatorText.text = pagerAdapter.getWeek(position)
+                    selectedPosition = position
+                }
+            })
+        }
 
         val backbutton = findViewById<ImageView>(R.id.arrowleft)
         backbutton.setOnClickListener {
@@ -93,7 +89,12 @@ class TimeResultActivity : AppCompatActivity() {
 
         val nextbtn = findViewById<Button>(R.id.resultbutton)
         nextbtn.setOnClickListener {
-            val intent = Intent(this, middleplace::class.java)
+            val selectedDate = HttpUtil().getSelectedDateFromSharedPreference(this) ?: ""
+            Log.d("SELECTED_DATE", selectedDate)
+            val intent = Intent(this, middleplace::class.java).apply{
+                putExtra("SELECTED_DATE" , selectedDate)
+                putStringArrayListExtra("PLACE_LIST", placeList)
+            }
             startActivity(intent)
         }
 
@@ -101,133 +102,85 @@ class TimeResultActivity : AppCompatActivity() {
 
     private fun generateWeekDataForYear(year: Int): List<MyData> {
         val calendar = Calendar.getInstance()
-        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val weekDataList = mutableListOf<MyData>()
 
+        var weekOfMonth = 0
+        var mondayCount = 0 // 월요일 카운트 변수 추가
 
         for (month in 0 until 12) {
             calendar.set(year, month, 1)
 
             // Find the first Monday of the month
             var firstMonday = calendar.firstDayOfWeek
+            Log.d("MONDAY", "$firstMonday")
             while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
                 calendar.add(Calendar.DATE, 1)
                 firstMonday++
             }
 
-            var weekOfMonth = 1
             while (calendar.get(Calendar.MONTH) == month) {
+                // Increment week number only if the next week is still within the same month
+                // 월요일인 경우 카운트 증가
+                var formatMonth = month + 1
+
+                // 한 주의 월요일이 5개를 초과하는 경우
+                if(calendar.get(Calendar.DAY_OF_MONTH) == 1){
+                    mondayCount = 0
+                    weekOfMonth = 0
+                }
+                if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {
+                    mondayCount++
+                }
+                if (mondayCount > 4) {
+                    weekOfMonth = 1 // weekOfMonth를 1로 초기화
+                    mondayCount = 0 // 카운트 리셋
+                    if((month == 0 || month == 3) && calendar.get(Calendar.DAY_OF_MONTH) == 29)
+                        formatMonth = month + 2
+                }
+                else{
+                    weekOfMonth++ // 그렇지 않으면 증가
+                }
+
                 val formattedDate = "${year}-${month + 1}-${calendar.get(Calendar.DAY_OF_MONTH)}"
-                val weekData = MyData("${month + 1}월 ${weekOfMonth}주차", "데이터 $formattedDate")
+                val weekData = MyData("${formatMonth}월 ${weekOfMonth}주차", "데이터 $formattedDate")
 
                 weekDataList.add(weekData)
                 calendar.add(Calendar.DATE, 7)
-
-                // Increment week number only if the next week is still within the same month
-                if (calendar.get(Calendar.MONTH) == month) {
-                    weekOfMonth++
-                }
             }
         }
-
         return weekDataList
     }
 }
-/*
-    //시간 결정 팝업
-    private fun showCheckPopup(startTime: String, orangeCount: Int) {
-        val dialogView =
-            LayoutInflater.from(this).inflate(R.layout.time_result_check_popup, null)
-        val alertDialogBuilder = AlertDialog.Builder(this).setView(dialogView)
-        val alertDialog = alertDialogBuilder.create()
 
-        val TimeTextView = dialogView.findViewById<TextView>(R.id.checktext)
-        TimeTextView.text = "선택된 일정 : ${startTime}부터 ${orangeCount}시간"
-
-        dialogView.findViewById<Button>(R.id.confirm).setOnClickListener {
-            // 선택한 일정 저장
-
-        }
-
-        dialogView.findViewById<Button>(R.id.cancel).setOnClickListener {
-            alertDialog.dismiss()
-        }
-
-        alertDialog.show()
-    }
-}
-
-                // 멤버 함수로 변경
-                private fun updateBoxesColor(position: Int) {
-                    /** 여기서 box를 계산해서 색을 칠해 */
-                    val newPosition = position % numPage // 현재 페이지 인덱스 계산
-                    val startBoxIndex = newPosition * 4 // 시작 상자의 인덱스
-                    val endBoxIndex = startBoxIndex + 3 // 마지막 상자의 인덱스
-
-                    // 시작 상자부터 마지막 상자까지 순회하면서 회색으로 변경
-                    for (i in startBoxIndex..endBoxIndex) {
-                        // i는 0부터 시작하기 때문에, 실제 뷰의 인덱스는 i + 1이 됩니다.
-                        val boxView = binding.root.findViewWithTag<ImageView>("box_${i + 1}")
-                        boxView?.setColorFilter(resources.getColor(R.color.gray))
+private suspend fun getScheduleList(
+    retrofit: Retrofit, members: ArrayList<Int>
+) : ArrayList<scheduleClass>{
+    return withContext(Dispatchers.IO) {
+        // api 호출
+        val startDate = "2020-01-01"
+        val endDate = "2025-12-31"
+        val apiService = retrofit.create(ApiService::class.java)
+        val call = apiService.calcSchedule(BusyTimeDto(members, startDate, endDate))
+        val response = call.execute()
+        if (response.isSuccessful) {
+            val responseData = response.body()
+            // 응답 데이터 로그
+            responseData?.let {
+                Log.d("ApiTest", "SCHEDULE_CALC: $it $members")
+                if(it.data is ArrayList<CalcScheduleDto>){
+                    var resultCalcSchedule = ArrayList<scheduleClass>()
+                    for(schedule in it.data){
+                        val newSchedule = scheduleClass(schedule.startTime, schedule.endTime)
+                        resultCalcSchedule.add(newSchedule)
                     }
-                }
-                private fun getData(
-                    memberIds : List<MemberClass>,
-                ){
-                    // Retrofit 객체 생성
-                    val jwt = HttpUtil().getJWTFromSharedPreference(this) ?: ""
-                    val client = HttpUtil().createClient(jwt)
-                    val retrofit = HttpUtil().createRetrofitWithHeader(client)
-
-                    //데이터 정리
-                    val data = mutableListOf<Any>()
-
-                    lifecycleScope.launch(Dispatchers.IO){
-                        val apiService = retrofit.create(ApiService::class.java)
-
-                        /** member id 별로 데이터를 받아오는 것으로 했습니다!
-                         * 제가 전체적으로 이해가 부족해서 많이 못해드렸네요ㅜ */
-                        memberIds.forEach{user ->
-                            val call = apiService.getSchedules(user.userId)
-
-                            val response = call.execute()
-                            if (response.isSuccessful) {
-                                val responseData = response.body()
-                                // 응답 데이터 로그
-                                responseData?.let {
-                                    Log.d("ApiTest", "유저 스케줄: ${it.data}")
-                                    for(schedule in it.data){
-                                        /** 여기서 중복되는 시간들을 조건으로 넣어서 조건 충족 시 data에 넣으면 될 것 같습니다! */
-                                        data.add(ScheduleItem(schedule.id, schedule.title, schedule.detail, schedule.startTime, schedule.endTime))
-                                    }
-
-                                }
-                                // 예: responseData를 TextView에 설정하거나, 다른 작업을 수행할 수 있습니다.
-                            } else {
-                                // 요청 실패 처리
-                                Log.d("ERRR", "실패")
-                            }
-                        }
-                    }
-                }
-
-    private fun updateBoxesColor(position: Int) {
-        val newPosition = position % numPage // 현재 페이지 인덱스 계산
-        val startBoxIndex = newPosition * 4 // 시작 상자의 인덱스
-        val endBoxIndex = startBoxIndex + 3 // 마지막 상자의 인덱스
-
-        // 시작 상자부터 마지막 상자까지 순회하면서 회색으로 변경
-        for (i in startBoxIndex..endBoxIndex) {
-            // i는 0부터 시작하기 때문에, 실제 뷰의 인덱스는 i + 1이 됩니다.
-            val boxView = binding.root.findViewWithTag<ImageView>("box_${i + 1}")
-            boxView?.let {
-                // Set the color of the box to orange (or any other color)
-                it.setColorFilter(resources.getColor(R.color.gray))
-                // Set an onClickListener to show the popup
-                it.setOnClickListener {
-                    showCheckPopup()
+                    return@withContext resultCalcSchedule
                 }
             }
+            // 예: responseData를 TextView에 설정하거나, 다른 작업을 수행할 수 있습니다.
+        } else {
+            // 요청 실패 처리
+            Log.d("ERRR", "실패")
         }
+        return@withContext ArrayList<scheduleClass>()
     }
-    */
+}

@@ -74,8 +74,7 @@ class moimResult : AppCompatActivity() {
             drinkAddress.text = recommendPlace.drinkAddress
             drinkPhone.text = recommendPlace.drinkPhone
             drinkHash.text = recommendPlace.drinkHash
-//            whenText.text = "시작: ${recommendPlace.startTime}\n종료: ${recommendPlace.endTime}"
-            whenText.text = "2024년 05월 24일 18:00 "
+            whenText.text = recommendPlace.startTime
             whereText.text = recommendPlace.resultAddress
         }
 

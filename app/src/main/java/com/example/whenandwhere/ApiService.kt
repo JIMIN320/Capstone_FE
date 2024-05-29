@@ -66,4 +66,7 @@ interface ApiService {
 
     @GET("api/result/get-result/{groupId}")
     fun getRecommend(@Path("groupId") groupId : Int) : Call<RecommendResultDto>
+
+    @POST("api/schedule/busytime-group")
+    fun calcSchedule(@Body busyTimeDto : BusyTimeDto) : Call<ScheduleCalcListDto>
 }

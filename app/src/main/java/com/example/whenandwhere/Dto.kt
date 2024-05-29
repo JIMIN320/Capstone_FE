@@ -44,6 +44,12 @@ data class ScheduleListDto(
     @SerializedName("message") var message : String
 )
 
+data class ScheduleCalcListDto(
+    @Expose
+    @SerializedName("data") var data : ArrayList<CalcScheduleDto>,
+    @SerializedName("message") var message : String
+)
+
 data class AIResultDto(
     @Expose
     @SerializedName("data") var data : AIRecommend,
@@ -125,3 +131,16 @@ data class RecommendResult(
     var startTime : String? = null,
     var endTime : String? = null
 ) : DataDto
+
+data class BusyTimeDto(
+    var members: ArrayList<Int>,
+    var startDate : String,
+    var endDate: String
+) : DataDto
+
+data class CalcScheduleDto(
+    val title : String? = null,
+    val detail : String? = null,
+    val startTime : String,
+    val endTime: String
+)

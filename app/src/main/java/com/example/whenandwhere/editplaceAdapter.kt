@@ -32,8 +32,12 @@ class editplaceAdapter(
             if (item.isCarIcon) R.drawable.car_orange else R.drawable.bus_orange
         )
 
-        holder.inputButton.setOnClickListener {
-            // 주소 검색 액티비티 시작 코드 여기에 추가
+        holder.inputButton.setOnFocusChangeListener { view, hasFocus ->
+            if (!hasFocus) {
+                // Save the input value when EditText loses focus
+                val newPosition = holder.adapterPosition
+                items[newPosition].updateDeparturePlace(holder.inputButton.text.toString())
+            }
         }
 
         holder.iconButton.setOnClickListener {

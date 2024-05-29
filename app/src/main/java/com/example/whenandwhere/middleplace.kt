@@ -80,11 +80,11 @@ class middleplace : AppCompatActivity() {
 
     // 선택된 장소 텍스트와 boolean 값을 다음 액티비티로 전달하는 함수
     private fun moveToNextActivityWithPlace(selectedPlace: String, value: Boolean) {
-        val startDate = intent.getStringExtra("startDate")
+        val startDate = intent.getStringExtra("SELECTED_DATE")
         val endDate = intent.getStringExtra("endDate")
 
         val nextIntent = Intent(this, ai_result::class.java).apply {
-            putExtra("startDate", startDate)
+            putExtra("SELECTED_DATE", startDate)
             putExtra("endDate", endDate)
             putExtra("SELECTED_PLACE", selectedPlace) // 선택된 장소 텍스트를 인텐트에 추가
             putExtra("booleanValue", value) // boolean 값을 인텐트에 추가

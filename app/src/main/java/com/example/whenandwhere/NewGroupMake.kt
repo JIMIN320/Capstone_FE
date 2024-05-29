@@ -24,8 +24,6 @@ import retrofit2.Response
 class NewGroupMake : AppCompatActivity() {
 
     private lateinit var groupNameEditText: EditText
-    private lateinit var radioGroup1: RadioGroup
-    private lateinit var radioGroup2: RadioGroup
     private var selectedRadioText: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {

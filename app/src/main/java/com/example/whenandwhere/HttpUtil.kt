@@ -17,6 +17,22 @@ class HttpUtil {
         return URL
     }
 
+    fun getSelectedDateFromSharedPreference(context: Context) : String? {
+        val sharedPref = context.getSharedPreferences("com.example.whenandwhere.DATE",
+            AppCompatActivity.MODE_PRIVATE
+        )
+        return sharedPref.getString("date", null)
+    }
+    fun saveSelectedDateFromSharedPreference(context: Context, date: String){
+        val sharedPref = context.getSharedPreferences("com.example.whenandwhere.DATE",
+            AppCompatActivity.MODE_PRIVATE
+        )
+        with(sharedPref.edit()) {
+            putString("date", date)
+            apply()
+        }
+    }
+
     // JWT를 SharedPreference에서 가져오는 함수
     fun getJWTFromSharedPreference(context : Context): String? {
         val sharedPref = context.getSharedPreferences("com.example.whenandwhere.JWT",

@@ -65,7 +65,7 @@ class ai_result : AppCompatActivity() {
         val groupId = HttpUtil().getCurrentGroupIdFromSharedPreference(this)
         // 전달된 값을 받아옵니다
         var count = intent.getIntExtra("count", 1)
-        val startDate = intent.getStringExtra("startDate")
+        val startDate = intent.getStringExtra("SELECTED_DATE")
         val endDate = intent.getStringExtra("endDate")
         val booleanValue = intent.getBooleanExtra("booleanValue", false)//음주여부
         val selectedPlace = intent.getStringExtra("SELECTED_PLACE") ?: "" //선택된 중간 장소

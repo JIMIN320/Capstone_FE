@@ -1,6 +1,7 @@
 package com.example.whenandwhere
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,16 +10,31 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.viewpager2.widget.ViewPager2
+import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 class MyFragment : Fragment() {
-
     private lateinit var WEEK: String
     private lateinit var DATA: String
     private lateinit var SCHEDULES: ArrayList<scheduleClass>
 
+    fun getMonthAndWeek(dateString: String): Pair<String, String> {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val date = dateFormat.parse(dateString) ?: return Pair("0", "0")
+
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+
+        val month = calendar.get(Calendar.MONTH) + 1 // Calendar.MONTH는 0부터 시작하므로 1을 더해줌
+        var weekOfMonth = calendar.get(Calendar.WEEK_OF_MONTH)
+        if(month == 5 && 27 <= calendar.time.date && calendar.time.date <= 31){
+            weekOfMonth = 5
+        }
+        return Pair(month.toString(), weekOfMonth.toString())
+    }
     companion object {
         fun newInstance(
             week: String,
@@ -55,6 +71,9 @@ class MyFragment : Fragment() {
     }
 
     private fun highlightSchedule(view: View) {
+        val currentMonth = WEEK.split(" ")[0].dropLast(1).let{if(it.startsWith("0")) it.removePrefix("0") else it}
+        val currentWeek = WEEK.split(" ")[1].dropLast(2)
+        // 이 메소드에서 선택된 week와 month를 가져와서 비교해야함
         val dayLayouts = listOf(
             view.findViewById<LinearLayout>(R.id.box_mon),
             view.findViewById<LinearLayout>(R.id.box_tue),
@@ -66,6 +85,10 @@ class MyFragment : Fragment() {
         )
 
         for (schedule in SCHEDULES) {
+            // 스케줄의 년도와 시간을 가져온다.
+            val scheduleDate = schedule.startTime.split(" ")[0]
+            val (scheduleMonth, scheduleWeek) = getMonthAndWeek(scheduleDate)
+            Log.d("SCHEDULE_MONTH", "$scheduleMonth $scheduleWeek $currentMonth $currentWeek")
             val startHour = schedule.startTime.substring(11, 13).toInt()
             val endHour = schedule.endTime.substring(11, 13).toInt()
             val dayIndex = getDayIndex(schedule.startTime.substring(0, 10)) // Assuming date format "yyyy-MM-dd"
@@ -73,7 +96,10 @@ class MyFragment : Fragment() {
             if (dayIndex in dayLayouts.indices) {
                 val dayLayout = dayLayouts[dayIndex]
                 for (hour in startHour..endHour) {
-                    if (hour - 10 in 0 until dayLayout.childCount) {
+                    if (hour - 10 in 0 until dayLayout.childCount &&
+                        // 선택된 날짜와 스케줄 날짜가 같아야 disabled 되도록 함
+                        scheduleMonth == currentMonth && scheduleWeek == currentWeek
+                    ) {
                         val hourView = dayLayout.getChildAt(hour - 10)
                         hourView.setBackgroundResource(R.drawable.box_background)
                         hourView.isClickable = false
@@ -114,8 +140,8 @@ class MyFragment : Fragment() {
         val date = getDateForDayIndex(dayIndex) // 요일 인덱스에 대한 날짜를 구하는 함수 호출
         val timeTextView = dialogView.findViewById<TextView>(R.id.checktext)
         timeTextView.text = "선택된 일정: ${date} ${hour}:00"
-
         dialogView.findViewById<Button>(R.id.confirm).setOnClickListener {
+            HttpUtil().saveSelectedDateFromSharedPreference(requireContext(), "${date} ${hour}:00")
             alertDialog.dismiss()
         }
 
