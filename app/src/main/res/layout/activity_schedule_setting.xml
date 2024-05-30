@@ -70,7 +70,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/schedule_recycler_view"
             android:layout_width="0dp"
-            android:layout_height="154dp"
+            android:layout_height="0dp"
             android:layout_marginTop="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -199,7 +199,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="44dp" />
 
-
             </LinearLayout>
 
             <LinearLayout
@@ -213,7 +212,6 @@
                     android:id="@+id/enddate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
                     android:text="종료"
                     android:textSize="20sp" />
 
@@ -249,5 +247,5 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+
